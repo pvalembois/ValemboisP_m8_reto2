@@ -1,0 +1,2922 @@
+
+
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        html {
+            max-width: 70ch;
+            /* larger spacing on larger screens, very small spacing on tiny screens */
+            padding: calc(1vmin + .5rem);
+            /* shorthand for margin-left/margin-right */
+            margin-inline: auto;
+            /* fluid sizing: https://frontaid.io/blog/fluid-typography-2d-css-locks-clamp/ */
+            font-size: clamp(1em, 0.909em + 0.45vmin, 1.25em);
+            /* use system font stack: https://developer.mozilla.org/en-US/docs/Web/CSS/font-family */
+            font-family: system-ui;
+            --font-size-x-small: 0.8rem;
+            --font-size-small: 1rem;
+            --font-size-medium: 1.3rem;
+            --font-size-large: 1.65rem;
+            --font-size-x-large: 2.4rem;
+            --space-xx-small: 0.25rem;
+            --space-x-small: 0.5rem;
+            --space-small: 1rem;
+            --space-medium: 1.5rem;
+            --space-large: 3rem;
+            --space-x-large: 4rem;
+            --space-xx-large: 6rem;
+            --space-xxx-large: 8rem;
+            --divider-line: 1px dashed var(--color-light-gray);
+            --outline-width: 3px;
+        }
+
+        /* increase line-height for everything except headings */
+        body :not(:is(h1, h2, h3, h4, h5, h6)) {
+            line-height: 1.75;
+        }
+
+        /*
+        .var-header {
+            position: sticky;
+            top: 10px;
+        } */
+        .variable-meta-string {
+            margin-top: var(--space-small);
+            margin-bottom: 0;
+            font-size: var(--font-size-x-small);
+        }
+
+        .data-table {
+            margin-left: 0;
+            margin-bottom: 0;
+            margin-top: var(--space-small);
+            margin-left: var(--space-small);
+            font-size: var(--font-size-x-small);
+            display: block;
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .data-table table {
+            border-collapse: collapse;
+            font-size: var(--font-size-x-small);
+        }
+
+        .data-table thead {
+            border-bottom: 2px solid var(--color-black);
+            display: table-header-group;
+            vertical-align: middle;
+            border-color: inherit;
+        }
+
+        .data-table th {
+            padding-bottom: var(--space-x-small);
+            padding-right: var(--space-small);
+            padding-bottom: var(--space-xx-small);
+            padding-top: var(--space-xx-small);
+            text-align: left;
+        }
+
+    </style>
+    <title>Codebook</title>
+</head>
+
+<body>
+    <h1>Codebook</h1>
+    <h2>Datafiles</h2>
+        
+<h3>ESS1 - integrated file, edition 6.7</h3>
+<p><a href="https://doi.org/10.21338/ess1e06_7" target="_blank">doi:10.21338/ess1e06_7</a></p>
+        
+<h3>ESS2 - integrated file, edition 3.6 (Italy not included)</h3>
+<p><a href="https://doi.org/10.21338/ess2e03_6" target="_blank">doi:10.21338/ess2e03_6</a></p>
+        
+<h3>ESS3 - integrated file, edition 3.7 (Latvia and Romania not included)</h3>
+<p><a href="https://doi.org/10.21338/ess3e03_7" target="_blank">doi:10.21338/ess3e03_7</a></p>
+        
+<h3>ESS4 - integrated file, edition 4.6 (Austria and Lithuania not included)</h3>
+<p><a href="https://doi.org/10.21338/ess4e04_6" target="_blank">doi:10.21338/ess4e04_6</a></p>
+        
+<h3>ESS5 - integrated file, edition 3.6 (Austria not included)</h3>
+<p><a href="https://doi.org/10.21338/ess5e03_6" target="_blank">doi:10.21338/ess5e03_6</a></p>
+        
+<h3>ESS6 - integrated file, edition 2.7</h3>
+<p><a href="https://doi.org/10.21338/ess6e02_7" target="_blank">doi:10.21338/ess6e02_7</a></p>
+        
+<h3>ESS7 - integrated file, edition 2.3</h3>
+<p><a href="https://doi.org/10.21338/ess7e02_3" target="_blank">doi:10.21338/ess7e02_3</a></p>
+        
+<h3>ESS8 - integrated file, edition 2.3</h3>
+<p><a href="https://doi.org/10.21338/ess8e02_3" target="_blank">doi:10.21338/ess8e02_3</a></p>
+        
+<h3>ESS9 - integrated file, edition 3.3</h3>
+<p><a href="https://doi.org/10.21338/ess9e03_3" target="_blank">doi:10.21338/ess9e03_3</a></p>
+        
+<h3>ESS10 - integrated file, edition 3.3</h3>
+<p><a href="https://doi.org/10.21338/ess10e03_3" target="_blank">doi:10.21338/ess10e03_3</a></p>
+        
+<h3>ESS10 Self-completion - integrated file, edition 3.2</h3>
+<p><a href="https://doi.org/10.21338/ess10sce03_2" target="_blank">doi:10.21338/ess10sce03_2</a></p>
+        
+<h3>ESS11 - integrated file, edition 4.2</h3>
+<p><a href="https://doi.org/10.21338/ess11e04_2" target="_blank">doi:10.21338/ess11e04_2</a></p>
+    <h2>Variables</h2>
+<ul class="toc-list">
+    <li>
+        <a href="#name">
+            <span>name</span>
+            <span> - Title of dataset</span>
+        </a>
+    </li>
+    <li>
+        <a href="#essround">
+            <span>essround</span>
+            <span> - ESS round</span>
+        </a>
+    </li>
+    <li>
+        <a href="#edition">
+            <span>edition</span>
+            <span> - Edition</span>
+        </a>
+    </li>
+    <li>
+        <a href="#proddate">
+            <span>proddate</span>
+            <span> - Production date</span>
+        </a>
+    </li>
+    <li>
+        <a href="#idno">
+            <span>idno</span>
+            <span> - Respondent's identification number</span>
+        </a>
+    </li>
+    <li>
+        <a href="#cntry">
+            <span>cntry</span>
+            <span> - Country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#dweight">
+            <span>dweight</span>
+            <span> - Design weight</span>
+        </a>
+    </li>
+    <li>
+        <a href="#pspwght">
+            <span>pspwght</span>
+            <span> - Post-stratification weight including design weight</span>
+        </a>
+    </li>
+    <li>
+        <a href="#pweight">
+            <span>pweight</span>
+            <span> - Population size weight (must be combined with dweight or pspwght)</span>
+        </a>
+    </li>
+    <li>
+        <a href="#anweight">
+            <span>anweight</span>
+            <span> - Analysis weight</span>
+        </a>
+    </li>
+    <li>
+        <a href="#prob">
+            <span>prob</span>
+            <span> - Sampling probability</span>
+        </a>
+    </li>
+    <li>
+        <a href="#stratum">
+            <span>stratum</span>
+            <span> - Sampling stratum</span>
+        </a>
+    </li>
+    <li>
+        <a href="#psu">
+            <span>psu</span>
+            <span> - Primary sampling unit</span>
+        </a>
+    </li>
+    <li>
+        <a href="#pplfair">
+            <span>pplfair</span>
+            <span> - Most people try to take advantage of you, or try to be fair</span>
+        </a>
+    </li>
+    <li>
+        <a href="#pplhlp">
+            <span>pplhlp</span>
+            <span> - Most of the time people helpful or mostly looking out for themselves</span>
+        </a>
+    </li>
+    <li>
+        <a href="#ppltrst">
+            <span>ppltrst</span>
+            <span> - Most people can be trusted or you can't be too careful</span>
+        </a>
+    </li>
+    <li>
+        <a href="#lrscale">
+            <span>lrscale</span>
+            <span> - Placement on left right scale</span>
+        </a>
+    </li>
+    <li>
+        <a href="#polintr">
+            <span>polintr</span>
+            <span> - How interested in politics</span>
+        </a>
+    </li>
+    <li>
+        <a href="#stfdem">
+            <span>stfdem</span>
+            <span> - How satisfied with the way democracy works in country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#stfeco">
+            <span>stfeco</span>
+            <span> - How satisfied with present state of economy in country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#stfgov">
+            <span>stfgov</span>
+            <span> - How satisfied with the national government</span>
+        </a>
+    </li>
+    <li>
+        <a href="#stflife">
+            <span>stflife</span>
+            <span> - How satisfied with life as a whole</span>
+        </a>
+    </li>
+    <li>
+        <a href="#trstep">
+            <span>trstep</span>
+            <span> - Trust in the European Parliament</span>
+        </a>
+    </li>
+    <li>
+        <a href="#trstlgl">
+            <span>trstlgl</span>
+            <span> - Trust in the legal system</span>
+        </a>
+    </li>
+    <li>
+        <a href="#trstplc">
+            <span>trstplc</span>
+            <span> - Trust in the police</span>
+        </a>
+    </li>
+    <li>
+        <a href="#trstplt">
+            <span>trstplt</span>
+            <span> - Trust in politicians</span>
+        </a>
+    </li>
+    <li>
+        <a href="#trstprl">
+            <span>trstprl</span>
+            <span> - Trust in country's parliament</span>
+        </a>
+    </li>
+    <li>
+        <a href="#trstprt">
+            <span>trstprt</span>
+            <span> - Trust in political parties</span>
+        </a>
+    </li>
+    <li>
+        <a href="#imsmetn">
+            <span>imsmetn</span>
+            <span> - Allow many/few immigrants of same race/ethnic group as majority</span>
+        </a>
+    </li>
+    <li>
+        <a href="#imdfetn">
+            <span>imdfetn</span>
+            <span> - Allow many/few immigrants of different race/ethnic group from majority</span>
+        </a>
+    </li>
+    <li>
+        <a href="#impcntr">
+            <span>impcntr</span>
+            <span> - Allow many/few immigrants from poorer countries outside Europe</span>
+        </a>
+    </li>
+    <li>
+        <a href="#imbgeco">
+            <span>imbgeco</span>
+            <span> - Immigration bad or good for country's economy</span>
+        </a>
+    </li>
+    <li>
+        <a href="#imueclt">
+            <span>imueclt</span>
+            <span> - Country's cultural life undermined or enriched by immigrants</span>
+        </a>
+    </li>
+    <li>
+        <a href="#imwbcnt">
+            <span>imwbcnt</span>
+            <span> - Immigrants make country worse or better place to live</span>
+        </a>
+    </li>
+    <li>
+        <a href="#blgetmg">
+            <span>blgetmg</span>
+            <span> - Belong to minority ethnic group in country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#brncntr">
+            <span>brncntr</span>
+            <span> - Born in country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#facntr">
+            <span>facntr</span>
+            <span> - Father born in country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#happy">
+            <span>happy</span>
+            <span> - How happy are you</span>
+        </a>
+    </li>
+    <li>
+        <a href="#mocntr">
+            <span>mocntr</span>
+            <span> - Mother born in country</span>
+        </a>
+    </li>
+    <li>
+        <a href="#rlgdgr">
+            <span>rlgdgr</span>
+            <span> - How religious are you</span>
+        </a>
+    </li>
+    <li>
+        <a href="#gndr">
+            <span>gndr</span>
+            <span> - Gender</span>
+        </a>
+    </li>
+    <li>
+        <a href="#agea">
+            <span>agea</span>
+            <span> - Age of respondent, calculated</span>
+        </a>
+    </li>
+    <li>
+        <a href="#domicil">
+            <span>domicil</span>
+            <span> - Domicile, respondent's description</span>
+        </a>
+    </li>
+    <li>
+        <a href="#eduyrs">
+            <span>eduyrs</span>
+            <span> - Years of full-time education completed</span>
+        </a>
+    </li>
+    <li>
+        <a href="#eisced">
+            <span>eisced</span>
+            <span> - Highest level of education, ES - ISCED</span>
+        </a>
+    </li>
+    <li>
+        <a href="#hincfel">
+            <span>hincfel</span>
+            <span> - Feeling about household's income nowadays</span>
+        </a>
+    </li>
+    <li>
+        <a href="#mnactic">
+            <span>mnactic</span>
+            <span> - Main activity, last 7 days. All respondents. Post coded</span>
+        </a>
+    </li>
+    <li>
+        <a href="#inwyys">
+            <span>inwyys</span>
+            <span> - Start of interview, year</span>
+        </a>
+    </li>
+    <li>
+        <a href="#inwyye">
+            <span>inwyye</span>
+            <span> - End of interview, year</span>
+        </a>
+    </li>
+</ul>
+    
+<div>
+    <h3 id="name">name </h3>
+        <div>Title of dataset</div>
+</div>
+    
+<div>
+    <h3 id="essround">essround </h3>
+        <div>ESS round</div>
+</div>
+    
+<div>
+    <h3 id="edition">edition </h3>
+        <div>Edition</div>
+</div>
+    
+<div>
+    <h3 id="proddate">proddate </h3>
+        <div>Production date</div>
+</div>
+    
+<div>
+    <h3 id="idno">idno </h3>
+        <div>Respondent's identification number</div>
+</div>
+    
+<div>
+    <h3 id="cntry">cntry </h3>
+        <div>Country</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">AL</td>
+                        <td>Albania</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">AT</td>
+                        <td>Austria</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">BE</td>
+                        <td>Belgium</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">BG</td>
+                        <td>Bulgaria</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">CH</td>
+                        <td>Switzerland</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">CY</td>
+                        <td>Cyprus</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">CZ</td>
+                        <td>Czechia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">DE</td>
+                        <td>Germany</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">DK</td>
+                        <td>Denmark</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">EE</td>
+                        <td>Estonia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">ES</td>
+                        <td>Spain</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">FI</td>
+                        <td>Finland</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">FR</td>
+                        <td>France</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">GB</td>
+                        <td>United Kingdom</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">GE</td>
+                        <td>Georgia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">GR</td>
+                        <td>Greece</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">HR</td>
+                        <td>Croatia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">HU</td>
+                        <td>Hungary</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">IE</td>
+                        <td>Ireland</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">IS</td>
+                        <td>Iceland</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">IL</td>
+                        <td>Israel</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">IT</td>
+                        <td>Italy</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">LT</td>
+                        <td>Lithuania</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">LU</td>
+                        <td>Luxembourg</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">LV</td>
+                        <td>Latvia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">ME</td>
+                        <td>Montenegro</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">MK</td>
+                        <td>North Macedonia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">NL</td>
+                        <td>Netherlands</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">NO</td>
+                        <td>Norway</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">PL</td>
+                        <td>Poland</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">PT</td>
+                        <td>Portugal</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">RO</td>
+                        <td>Romania</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">RS</td>
+                        <td>Serbia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">RU</td>
+                        <td>Russian Federation</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">SE</td>
+                        <td>Sweden</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">SI</td>
+                        <td>Slovenia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">SK</td>
+                        <td>Slovakia</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">TR</td>
+                        <td>Turkey</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">UA</td>
+                        <td>Ukraine</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">XK</td>
+                        <td>Kosovo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</div>
+    
+<div>
+    <h3 id="dweight">dweight </h3>
+        <div>Design weight</div>
+</div>
+    
+<div>
+    <h3 id="pspwght">pspwght </h3>
+        <div>Post-stratification weight including design weight</div>
+</div>
+    
+<div>
+    <h3 id="pweight">pweight </h3>
+        <div>Population size weight (must be combined with dweight or pspwght)</div>
+</div>
+    
+<div>
+    <h3 id="anweight">anweight </h3>
+        <div>Analysis weight</div>
+</div>
+    
+<div>
+    <h3 id="prob">prob </h3>
+        <div>Sampling probability</div>
+</div>
+    
+<div>
+    <h3 id="stratum">stratum </h3>
+        <div>Sampling stratum</div>
+</div>
+    
+<div>
+    <h3 id="psu">psu </h3>
+        <div>Primary sampling unit</div>
+</div>
+    
+<div>
+    <h3 id="pplfair">pplfair </h3>
+        <div>Most people try to take advantage of you, or try to be fair</div>
+        <div class="variable-meta-string"> CARD 3</div>
+        <div class="variable-meta-string"> Using this card, do you think that most people would try to take advantage of you if they got the chance, or would they try to be fair?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Most people try to take advantage of me</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Most people try to be fair</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="pplhlp">pplhlp </h3>
+        <div>Most of the time people helpful or mostly looking out for themselves</div>
+        <div class="variable-meta-string"> CARD 4</div>
+        <div class="variable-meta-string"> Would you say that most of the time people try to be helpful or that they are mostly looking out for themselves?</div>
+        <div class="variable-meta-string"> Please use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>People mostly look out for themselves</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>People mostly try to be helpful</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="ppltrst">ppltrst </h3>
+        <div>Most people can be trusted or you can't be too careful</div>
+        <div class="variable-meta-string"> ASK ALL 
+CARD 2</div>
+        <div class="variable-meta-string"> Using this card, generally speaking, would you say that most people can be trusted, or that you can't be too careful in dealing with people? Please tell me on a score of 0 to 10, where 0 means you can't be too careful and 10 means that most people can be trusted.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>You can't be too careful</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Most people can be trusted</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="lrscale">lrscale </h3>
+        <div>Placement on left right scale</div>
+        <div class="variable-meta-string"> CARD 11</div>
+        <div class="variable-meta-string"> In politics people sometimes talk of 'left' and 'right'. Using this card, where would you place yourself on this scale, where 0 means the left and 10 means the right?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Right</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="polintr">polintr </h3>
+        <div>How interested in politics</div>
+        <div class="variable-meta-string"> </div>
+        <div class="variable-meta-string"> How interested would you say you are in politics - are you...</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Very interested</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Quite interested</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Hardly interested</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Not at all interested</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="stfdem">stfdem </h3>
+        <div>How satisfied with the way democracy works in country</div>
+        <div class="variable-meta-string"> STILL CARD 12</div>
+        <div class="variable-meta-string"> And on the whole, how satisfied are you with the way democracy works in [country]?</div>
+        <div class="variable-meta-string"> Still use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Extremely dissatisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Extremely satisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="stfeco">stfeco </h3>
+        <div>How satisfied with present state of economy in country</div>
+        <div class="variable-meta-string"> STILL CARD 12</div>
+        <div class="variable-meta-string"> On the whole how satisfied are you with the present state of the economy in [country]?</div>
+        <div class="variable-meta-string"> Still use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Extremely dissatisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Extremely satisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="stfgov">stfgov </h3>
+        <div>How satisfied with the national government</div>
+        <div class="variable-meta-string"> STILL CARD 12</div>
+        <div class="variable-meta-string"> Now thinking about the [country] government, how satisfied are you with the way it is doing its job?</div>
+        <div class="variable-meta-string"> Still use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Extremely dissatisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Extremely satisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="stflife">stflife </h3>
+        <div>How satisfied with life as a whole</div>
+        <div class="variable-meta-string"> CARD 12</div>
+        <div class="variable-meta-string"> All things considered, how satisfied are you with your life as a whole nowadays? Please answer using this card, where 0 means extremely dissatisfied and 10 means extremely satisfied.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Extremely dissatisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Extremely satisfied</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="trstep">trstep </h3>
+        <div>Trust in the European Parliament</div>
+        <div class="variable-meta-string"> CARD 9</div>
+        <div class="variable-meta-string"> Using this card, please tell me on a score of 0-10 how much you personally trust each of the institutions I read out. 0 means you do not trust an institution at all, and 10 means you have complete trust. Firstly... ...the European Parliament?</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>No trust at all</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Complete trust</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="trstlgl">trstlgl </h3>
+        <div>Trust in the legal system</div>
+        <div class="variable-meta-string"> CARD 9</div>
+        <div class="variable-meta-string"> Using this card, please tell me on a score of 0-10 how much you personally trust each of the institutions I read out. 0 means you do not trust an institution at all, and 10 means you have complete trust. Firstly... ...the legal system?</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>No trust at all</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Complete trust</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="trstplc">trstplc </h3>
+        <div>Trust in the police</div>
+        <div class="variable-meta-string"> CARD 9</div>
+        <div class="variable-meta-string"> Using this card, please tell me on a score of 0-10 how much you personally trust each of the institutions I read out. 0 means you do not trust an institution at all, and 10 means you have complete trust. Firstly... ...the police?</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>No trust at all</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Complete trust</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="trstplt">trstplt </h3>
+        <div>Trust in politicians</div>
+        <div class="variable-meta-string"> CARD 9</div>
+        <div class="variable-meta-string"> Using this card, please tell me on a score of 0-10 how much you personally trust each of the institutions I read out. 0 means you do not trust an institution at all, and 10 means you have complete trust. Firstly... ...politicians?</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>No trust at all</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Complete trust</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="trstprl">trstprl </h3>
+        <div>Trust in country's parliament</div>
+        <div class="variable-meta-string"> CARD 9</div>
+        <div class="variable-meta-string"> Using this card, please tell me on a score of 0-10 how much you personally trust each of the institutions I read out. 0 means you do not trust an institution at all, and 10 means you have complete trust. Firstly... ...[country]'s parliament?</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>No trust at all</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Complete trust</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="trstprt">trstprt </h3>
+        <div>Trust in political parties</div>
+        <div class="variable-meta-string"> CARD 9</div>
+        <div class="variable-meta-string"> Using this card, please tell me on a score of 0-10 how much you personally trust each of the institutions I read out. 0 means you do not trust an institution at all, and 10 means you have complete trust. Firstly... ...political parties?</div>
+        <div class="variable-meta-string"> READ OUT...</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>No trust at all</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Complete trust</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="imsmetn">imsmetn </h3>
+        <div>Allow many/few immigrants of same race/ethnic group as majority</div>
+        <div class="variable-meta-string"> CARD 18</div>
+        <div class="variable-meta-string"> Now, using this card, to what extent do you think [country] should allow people of the same race or ethnic group as most [country]'s people to come and live here?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Allow many to come and live here</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Allow some</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Allow a few</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Allow none</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="imdfetn">imdfetn </h3>
+        <div>Allow many/few immigrants of different race/ethnic group from majority</div>
+        <div class="variable-meta-string"> STILL CARD 18</div>
+        <div class="variable-meta-string"> How about people of a different race or ethnic group from most [country] people?</div>
+        <div class="variable-meta-string"> Still use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Allow many to come and live here</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Allow some</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Allow a few</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Allow none</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="impcntr">impcntr </h3>
+        <div>Allow many/few immigrants from poorer countries outside Europe</div>
+        <div class="variable-meta-string"> STILL CARD 18</div>
+        <div class="variable-meta-string"> How about people from the poorer countries outside Europe?</div>
+        <div class="variable-meta-string"> Use the same card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Allow many to come and live here</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Allow some</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Allow a few</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Allow none</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="imbgeco">imbgeco </h3>
+        <div>Immigration bad or good for country's economy</div>
+        <div class="variable-meta-string"> CARD 19</div>
+        <div class="variable-meta-string"> Would you say it is generally bad or good for [country]'s economy that people come to live here from other countries?</div>
+        <div class="variable-meta-string"> Please use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Bad for the economy</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Good for the economy</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="imueclt">imueclt </h3>
+        <div>Country's cultural life undermined or enriched by immigrants</div>
+        <div class="variable-meta-string"> CARD 20</div>
+        <div class="variable-meta-string"> And, using this card, would you say that [country]'s cultural life is generally undermined or enriched by people coming to live here from other countries?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Cultural life undermined</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Cultural life enriched</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="imwbcnt">imwbcnt </h3>
+        <div>Immigrants make country worse or better place to live</div>
+        <div class="variable-meta-string"> CARD 21</div>
+        <div class="variable-meta-string"> Is [country] made a worse or a better place to live by people coming to live here from other countries?</div>
+        <div class="variable-meta-string"> Please use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Worse place to live</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Better place to live</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="blgetmg">blgetmg </h3>
+        <div>Belong to minority ethnic group in country</div>
+        <div class="variable-meta-string"> Do you belong to a minority ethnic group in [country]?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="brncntr">brncntr </h3>
+        <div>Born in country</div>
+        <div class="variable-meta-string"> ASK ALL</div>
+        <div class="variable-meta-string"> Were you born in [country]?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="facntr">facntr </h3>
+        <div>Father born in country</div>
+        <div class="variable-meta-string"> Was your father born in [country]?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="happy">happy </h3>
+        <div>How happy are you</div>
+        <div class="variable-meta-string"> CARD 22</div>
+        <div class="variable-meta-string"> Taking all things together, how happy would you say you are?</div>
+        <div class="variable-meta-string"> Please use this card</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Extremely unhappy</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Extremely happy</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="mocntr">mocntr </h3>
+        <div>Mother born in country</div>
+        <div class="variable-meta-string"> ASK ALL</div>
+        <div class="variable-meta-string"> Was your mother born in [country]?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="rlgdgr">rlgdgr </h3>
+        <div>How religious are you</div>
+        <div class="variable-meta-string"> ASK ALL
+CARD 27</div>
+        <div class="variable-meta-string"> Regardless of whether you belong to a particular religion, how religious would you say you are?</div>
+        <div class="variable-meta-string"> Please use this card.</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Not at all religious</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">10</td>
+                        <td>Very religious</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="gndr">gndr </h3>
+        <div>Gender</div>
+        <div class="variable-meta-string"> CODE SEX, respondent</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Male</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Female</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="agea">agea </h3>
+        <div>Age of respondent, calculated</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">999</td>
+                        <td>Not available*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="domicil">domicil </h3>
+        <div>Domicile, respondent's description</div>
+        <div class="variable-meta-string"> ASK ALL
+CARD 45</div>
+        <div class="variable-meta-string"> Which phrase on this card best describes the area where you live?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>A big city</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Suburbs or outskirts of big city</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Town or small city</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Country village</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>Farm or home in countryside</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="eduyrs">eduyrs </h3>
+        <div>Years of full-time education completed</div>
+        <div class="variable-meta-string"> ASK ALL</div>
+        <div class="variable-meta-string"> About how many years of education have you completed, whether full-time or part-time? Please report these in full-time equivalents and include compulsory years of schooling.</div>
+        <div class="variable-meta-string"> INTERVIEWER: round answer up or down to the nearest whole year.
+TYPE IN:</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="eisced">eisced </h3>
+        <div>Highest level of education, ES - ISCED</div>
+        <div class="variable-meta-string"> CARD 67</div>
+        <div class="variable-meta-string"> Generated variable: Highest level of education, ES - ISCED</div>
+        <div class="variable-meta-string"> Please use this card</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">0</td>
+                        <td>Not possible to harmonise into ES-ISCED</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>ES-ISCED I , less than lower secondary</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>ES-ISCED II, lower secondary</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>ES-ISCED IIIb, lower tier upper secondary</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>ES-ISCED IIIa, upper tier upper secondary</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>ES-ISCED IV, advanced vocational, sub-degree</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>ES-ISCED V1, lower tertiary education, BA level</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>ES-ISCED V2, higher tertiary education, >= MA level</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">55</td>
+                        <td>Other</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="hincfel">hincfel </h3>
+        <div>Feeling about household's income nowadays</div>
+        <div class="variable-meta-string"> CARD 52</div>
+        <div class="variable-meta-string"> Which of the descriptions on this card comes closest to how you feel about your household's income nowadays?</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Living comfortably on present income</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Coping on present income</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Difficult on present income</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Very difficult on present income</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="mnactic">mnactic </h3>
+        <div>Main activity, last 7 days. All respondents. Post coded</div>
+        <div class="variable-meta-string"> POST CODE: MAIN ACTIVITY</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">1</td>
+                        <td>Paid work</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">2</td>
+                        <td>Education</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">3</td>
+                        <td>Unemployed, looking for job</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">4</td>
+                        <td>Unemployed, not looking for job</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">5</td>
+                        <td>Permanently sick or disabled</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">6</td>
+                        <td>Retired</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">7</td>
+                        <td>Community or military service</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">8</td>
+                        <td>Housework, looking after children, others</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">9</td>
+                        <td>Other</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">66</td>
+                        <td>Not applicable*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">77</td>
+                        <td>Refusal*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">88</td>
+                        <td>Don't know*</td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap">99</td>
+                        <td>No answer*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="inwyys">inwyys </h3>
+        <div>Start of interview, year</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">9999</td>
+                        <td>Not available*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+    
+<div>
+    <h3 id="inwyye">inwyye </h3>
+        <div>End of interview, year</div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="codelist">
+                    <tr>
+                        <td class="nowrap">9999</td>
+                        <td>Not available*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span> *) Missing value</span>
+            </p>
+        </div>
+</div>
+</body>
+
+</html>

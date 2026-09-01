@@ -1,0 +1,26 @@
+# --- Sesion de R -------------------------------------------------------------
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+
+# --- Ficheros intermedios de knitr / rmarkdown -------------------------------
+*_files/
+*_cache/
+*.log
+*.aux
+*.out
+*.toc
+
+# --- Sistema -----------------------------------------------------------------
+.DS_Store
+Thumbs.db
+
+# --- Material de trabajo previo, ajeno al entregable -------------------------
+_obsoleto/
+Previos trabajos EDA/
+
+# NOTA IMPORTANTE: las carpetas de datos NO se ignoran. El enunciado del Reto 2
+# pide expresamente que los ficheros de datos formen parte del repositorio y del
+# entregable, tanto la base original como la depurada. El .sav pesa 44 MB, por
+# debajo del limite de 100 MB por fichero de GitHub.

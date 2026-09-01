@@ -1,0 +1,511 @@
+---
+title: "Actitudes hacia la inmigración en Europa · 2002–2023"
+author: "Pamela Valembois Madrigal · Encuesta Social Europea, rondas 1–11"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    source_code: embed
+---
+
+```{r configuracion, include=FALSE}
+# =============================================================================
+# M8 - Visualizacion de datos y Reproducibilidad | Reto 2
+# Dashboard: implementacion del diseno especificado en el Reto 1
+#
+# Requisitos previos: haber ejecutado, en este orden,
+#   1_datos/2_codigo/01_importar_depurar.R
+#   1_datos/2_codigo/02_eda.R
+#
+# El dashboard NO recalcula las medias: lee las tablas agregadas que produce el
+# script 02. De ese modo el dashboard, el informe y la presentacion muestran
+# necesariamente las mismas cifras, y ninguna se calcula por dos caminos.
+#
+# Como generarlo (con m8_reto2.Rproj abierto):
+#   rmarkdown::render(here::here("2_dashboard", "codigo", "dashboard.Rmd"),
+#                     output_file = "dashboard.html",
+#                     output_dir  = here::here("2_dashboard"))
+# o, mas comodo, ejecutando el script  render_todo.R  de la raiz del proyecto.
+# =============================================================================
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(here)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(crosstalk)
+library(flexdashboard)
+
+# Paleta, tema, identidad cromatica de los paises y funciones de agregacion.
+source(here("1_datos", "2_codigo", "00_comun.R"), encoding = "UTF-8")
+
+TAB <- here("1_datos", "4_salidas", "tablas")
+
+# Guarda explicita: si el script 02 no se ha ejecutado, el dashboard se detiene
+# con un mensaje que dice exactamente que hacer, en lugar de fallar mas abajo
+# con un error de fichero no encontrado.
+necesarias <- c("02_serie_temporal_pais.csv", "02_dispersion_entre_paises.csv",
+                "02_gradiente_educativo.csv", "02_dos_indices_pais.csv",
+                "02_cohesion_institucional.csv", "02_cifras_destacadas.csv",
+                "02_perfil_sociodemografico.csv")
+faltan <- necesarias[!file.exists(file.path(TAB, necesarias))]
+if (length(faltan) > 0) {
+  stop("Faltan tablas agregadas en 1_datos/4_salidas/tablas/:\n  ",
+       paste(faltan, collapse = "\n  "),
+       "\n\nEjecuta antes, en este orden:",
+       "\n  source(here::here('1_datos','2_codigo','01_importar_depurar.R'))",
+       "\n  source(here::here('1_datos','2_codigo','02_eda.R'))", call. = FALSE)
+}
+
+leer <- function(x) read_csv(file.path(TAB, x), show_col_types = FALSE)
+mil  <- function(x) formatC(x, format = "d", big.mark = ".")
+
+# El orden de los niveles del factor 'pais' fija la correspondencia entre pais y
+# color. Al declararlo con los CATORCE niveles, plotly asigna los colores por
+# nivel y no por presencia en los datos: cualquier filtro que reduzca las series
+# conserva el color de las supervivientes. Es la regla de semejanza del Reto 1,
+# y la razon por la que el vector de colores vive en 00_comun.R y no aqui.
+NIVELES_PAIS <- unname(PAIS_NOMBRE)   # orden BE, CH, DE, ES, ... , SI
+PAL_PAIS     <- unname(PAIS_COLOR)    # mismo orden: color[i] corresponde a pais[i]
+como_pais    <- function(x) factor(as.character(x), levels = NIVELES_PAIS)
+
+serie <- leer("02_serie_temporal_pais.csv") |>
+  mutate(pais = como_pais(pais),
+         # La etiqueta emergente incluye el tamano muestral de la celda porque
+         # la audiencia lo necesita para juzgar la fiabilidad de una media: una
+         # diferencia de tres decimas significa algo distinto si se sustenta en
+         # mil observaciones o en ciento cincuenta.
+         etq = sprintf("<b>%s</b><br>%d: %.2f<br>n = %s entrevistas",
+                       pais, anio, media, mil(n)))
+
+dispersion  <- leer("02_dispersion_entre_paises.csv") |>
+  mutate(etq = sprintf("<b>%d</b><br>Media europea: %.2f<br>Amplitud: %.2f<br>Desviación típica entre países: %.3f",
+                       anio, media_eu, amplitud, dt))
+
+gradiente   <- leer("02_gradiente_educativo.csv") |>
+  mutate(pais = como_pais(pais)) |> arrange(diferencia)
+
+dos_indices <- leer("02_dos_indices_pais.csv") |> mutate(pais = como_pais(pais))
+cohesion    <- leer("02_cohesion_institucional.csv") |> mutate(pais = como_pais(pais))
+cifras      <- leer("02_cifras_destacadas.csv")
+
+# El orden de los niveles se fija a mano para que las escalas ordinales
+# (educacion, edad, habitat) se lean de menor a mayor y no en orden alfabetico:
+# un canal ordenado exige un dato ordenado, y al reves.
+ORDEN_NIVELES <- c("Bajo", "Medio", "Alto",
+                   "15-29", "30-44", "45-59", "60-74", "75+",
+                   "Hombre", "Mujer",
+                   "Ciudad grande", "Periferia de ciudad", "Ciudad pequeña",
+                   "Pueblo", "Campo")
+
+perfil <- leer("02_perfil_sociodemografico.csv") |>
+  mutate(pais  = como_pais(pais),
+         nivel = factor(nivel, levels = rev(ORDEN_NIVELES)),
+         dimension = factor(dimension,
+                            levels = c("Nivel educativo", "Grupo de edad",
+                                       "Sexo", "Habitat"),
+                            labels = c("Nivel educativo", "Grupo de edad",
+                                       "Sexo", "Hábitat")),
+         etq = sprintf("%s\n%s: %s\nMedia: %.2f\nn = %s",
+                       pais, dimension, nivel, media, mil(n)))
+
+valor_cifra <- function(clave) cifras$valor[cifras$clave == clave]
+
+# Configuracion comun de la barra de herramientas. Se retiran las herramientas
+# de seleccion por lazo, que no sirven a ninguna de las cinco preguntas y solo
+# anaden ruido al control.
+config_es <- function(p) {
+  config(p, displaylogo = FALSE,
+         modeBarButtonsToRemove = list("select2d", "lasso2d",
+                                       "toggleSpikelines", "hoverCompareCartesian"))
+}
+
+# El anio va como escala CUANTITATIVA con las marcas en su posicion real. El
+# intervalo entre rondas no es regular -la 10 se retraso por la pandemia y la 11
+# es de 2023- y comprimir visualmente el tramo 2020-2023 alteraria la pendiente
+# percibida justo en el periodo mas reciente.
+eje_x_anios <- list(title = "", tickmode = "array", tickvals = ANIOS,
+                    tickangle = -45, showgrid = FALSE, zeroline = FALSE,
+                    showline = FALSE)
+eje_y_actitud <- list(title = "Índice de actitud (0–10)",
+                      gridcolor = LINEA, zeroline = FALSE, showline = FALSE)
+```
+
+Panorámica
+=====================================================================
+
+Row {data-height=95}
+---------------------------------------------------------------------
+
+### Media europea 2023
+
+```{r cifra_1}
+# Solo tres cifras destacadas, no mas: la proliferacion de indicadores aislados
+# desplaza la atencion desde las relaciones hacia los valores sueltos, y lo que
+# esta herramienta debe facilitar es precisamente la comparacion.
+valueBox(sprintf("%.2f", valor_cifra("media_2023")),
+         caption = "Índice de actitud (0–10) · media de las 14 medias nacionales",
+         color = "#2a78d6")
+```
+
+### Cambio desde 2002
+
+```{r cifra_2}
+valueBox(sprintf("%+.2f", valor_cifra("cambio_2002_2023")),
+         caption = "Puntos de variación en dos décadas",
+         color = "#1baf7a")
+```
+
+### Amplitud entre países
+
+```{r cifra_3}
+valueBox(sprintf("%.2f", valor_cifra("amplitud_2023")),
+         caption = "Distancia entre el país más abierto y el más restrictivo",
+         color = "#eb6834")
+```
+
+Row {data-height=430}
+---------------------------------------------------------------------
+
+### G1 · ¿Cómo ha evolucionado cada país? La mayoría de Europa se abre; Hungría se cierra {data-width=640}
+
+```{r g1_panoramica}
+# Catorce series de color simultaneas exceden el limite de discriminacion
+# cromatica fiable. Once paises van en gris neutro como contexto y solo tres se
+# destacan con color: un elemento distinguido por un atributo basico como el
+# tono se detecta de forma preatentiva, en tiempo constante y sin importar el
+# numero de distractores (Ware). El gris no es una renuncia sino una decision
+# activa que establece dos planos de lectura, figura y fondo.
+g1 <- plot_ly()
+
+for (cc in setdiff(names(PAIS_NOMBRE), DESTACADOS)) {
+  d <- filter(serie, cntry == cc)
+  g1 <- add_trace(g1, data = d, x = ~anio, y = ~media,
+                  type = "scatter", mode = "lines",
+                  line = list(color = GRIS, width = 1.3),
+                  name = PAIS_NOMBRE[[cc]], showlegend = FALSE,
+                  text = ~etq, hoverinfo = "text")
+}
+
+for (cc in DESTACADOS) {
+  d <- filter(serie, cntry == cc)
+  g1 <- add_trace(g1, data = d, x = ~anio, y = ~media,
+                  type = "scatter", mode = "lines+markers",
+                  line   = list(color = PAIS_COLOR[[cc]], width = 2.6),
+                  marker = list(color = PAIS_COLOR[[cc]], size = 6),
+                  name = PAIS_NOMBRE[[cc]], showlegend = TRUE,
+                  text = ~etq, hoverinfo = "text")
+}
+
+g1 |>
+  layout(
+    xaxis = eje_x_anios,
+    yaxis = eje_y_actitud,
+    hovermode = "closest",
+    legend = list(orientation = "h", x = 0, y = 1.13, font = list(size = 10)),
+    margin = list(t = 24, r = 12, b = 46, l = 54),
+    # La trayectoria hungara emerge no solo por el color sino por su DIRECCION
+    # contraria a la del conjunto: es un elemento diferente y se detecta sin
+    # busqueda deliberada. La referencia de 2015 evita que el lector tenga que
+    # reconstruir de memoria por que cae justo ahi.
+    shapes = list(list(type = "line", x0 = 2015, x1 = 2015,
+                       yref = "paper", y0 = 0, y1 = 1,
+                       line = list(dash = "dot", color = "#a8a7a2", width = 1))),
+    annotations = list(list(x = 2015, y = 1, xref = "x", yref = "paper",
+                            text = "crisis de refugiados 2015",
+                            showarrow = FALSE, xanchor = "left", yanchor = "top",
+                            font = list(size = 9, color = SUAVE)))
+  ) |>
+  config_es()
+```
+
+### G2 · ¿Convergen o divergen? La banda se ensancha: divergen {data-width=360}
+
+```{r g2_dispersion}
+# Este grafico muestra la VARIABILIDAD en lugar del nivel. La banda exterior
+# marca el rango entre el pais mas abierto y el mas restrictivo, la interior el
+# recorrido intercuartilico y la linea central la media de las medias
+# nacionales. El area ocupa una posicion baja en la jerarquia de Cleveland y
+# McGill para estimar magnitudes exactas, pero la tarea aqui es juzgar la
+# ANCHURA, no el valor; y la precision que el area no da la aporta la etiqueta
+# emergente, que devuelve la cifra exacta.
+plot_ly(dispersion, x = ~anio) |>
+  add_ribbons(ymin = ~minimo, ymax = ~maximo,
+              fillcolor = "rgba(42,120,214,0.13)", line = list(width = 0),
+              name = "Mínimo–máximo", hoverinfo = "skip") |>
+  add_ribbons(ymin = ~p25, ymax = ~p75,
+              fillcolor = "rgba(42,120,214,0.30)", line = list(width = 0),
+              name = "Recorrido intercuartílico", hoverinfo = "skip") |>
+  add_trace(y = ~media_eu, type = "scatter", mode = "lines+markers",
+            line   = list(color = "#104281", width = 2.4),
+            marker = list(color = "#104281", size = 5),
+            name = "Media europea", text = ~etq, hoverinfo = "text") |>
+  layout(
+    xaxis = eje_x_anios,
+    yaxis = eje_y_actitud,
+    hovermode = "closest",
+    legend = list(orientation = "h", x = 0, y = 1.16, font = list(size = 9)),
+    margin = list(t = 24, r = 12, b = 46, l = 54)
+  ) |>
+  config_es()
+```
+
+Row {data-height=430}
+---------------------------------------------------------------------
+
+### G3 · ¿Qué perfil se asocia a una actitud favorable? El gradiente educativo se cumple en los 14 países {data-width=500}
+
+```{r g3_gradiente}
+# Puntos conectados y no barras agrupadas: el objeto de interes es la DISTANCIA
+# entre niveles dentro de cada pais, y un segmento codifica esa distancia
+# mediante longitud, segundo canal de la jerarquia de precision perceptiva. En
+# barras habria que inferirla comparando alturas, lo que es menos preciso, y
+# cuarenta y dos barras producirian ademas una densidad ilegible.
+g3 <- plot_ly() |>
+  add_segments(x = gradiente$Bajo, xend = gradiente$Alto,
+               y = gradiente$pais,  yend = gradiente$pais,
+               line = list(color = "#dcdbd6", width = 3),
+               showlegend = FALSE, hoverinfo = "skip")
+
+# Rampa ordinal de un solo tono, de claro a oscuro: la luminosidad se percibe
+# como ordenada, de modo que el canal visual reproduce el orden del dato y el
+# lector no necesita memorizarlo a partir de la leyenda.
+for (nv in c("Bajo", "Medio", "Alto")) {
+  g3 <- add_trace(g3,
+                  x = gradiente[[nv]], y = gradiente$pais,
+                  type = "scatter", mode = "markers",
+                  marker = list(color = ORD[[nv]], size = 9,
+                                line = list(color = "white", width = 1)),
+                  name = nv,
+                  text = sprintf("<b>%s</b><br>Nivel educativo %s: %.2f<br>Gradiente Alto − Bajo: %.2f",
+                                 gradiente$pais, tolower(nv), gradiente[[nv]],
+                                 gradiente$diferencia),
+                  hoverinfo = "text")
+}
+
+g3 |>
+  layout(
+    xaxis = list(title = "Índice de actitud (0–10)",
+                 gridcolor = LINEA, zeroline = FALSE, showline = FALSE),
+    # El eje vertical se ordena por la magnitud del gradiente, de manera que la
+    # posicion en la lista transporte informacion ademas de identificar al pais.
+    yaxis = list(title = "", categoryorder = "array",
+                 categoryarray = as.character(gradiente$pais),
+                 showgrid = FALSE, zeroline = FALSE),
+    hovermode = "closest",
+    legend = list(orientation = "h", x = 0, y = 1.12, font = list(size = 10)),
+    margin = list(t = 24, r = 14, b = 42, l = 92)
+  ) |>
+  config_es()
+```
+
+### G4 · ¿Coinciden valoración y permisividad? No: hay países que divergen {data-width=500}
+
+```{r g4_dos_indices}
+# A nivel individual, con casi trescientas mil observaciones y coeficientes en
+# torno a 0,30, el solapamiento de marcas produciria una nube sin estructura
+# discernible. Al agregar por pais la unidad de analisis pasa a ser el pais y
+# las marcas se reducen a catorce, numero que permite etiquetado directo y
+# lectura individual de cada caso. La codificacion emplea posicion en dos
+# escalas no alineadas, segunda posicion de la jerarquia.
+ajuste <- lm(permisividad ~ actitud, data = dos_indices)
+xr     <- range(dos_indices$actitud)
+recta  <- data.frame(x = xr, y = predict(ajuste, data.frame(actitud = xr)))
+rho_pais <- cor(dos_indices$actitud, dos_indices$permisividad, method = "spearman")
+
+plot_ly() |>
+  # La recta de ajuste es una referencia visual: lo que importa es la DISTANCIA
+  # a ella, es decir, los paises anomalos, que asi se perciben de inmediato.
+  add_trace(data = recta, x = ~x, y = ~y, type = "scatter", mode = "lines",
+            line = list(color = GRIS, width = 2),
+            name = "Tendencia de ajuste", showlegend = FALSE, hoverinfo = "skip") |>
+  # El color se pasa como VECTOR explicito, indexado por el codigo del pais, en
+  # lugar de dejar que plotly derive la escala del factor. Es una sola traza y
+  # la correspondencia pais-color queda garantizada, que es la regla del Reto 1.
+  add_trace(data = dos_indices, x = ~actitud, y = ~permisividad,
+            type = "scatter", mode = "markers+text",
+            marker = list(size = 10,
+                          color = unname(PAIS_COLOR[dos_indices$cntry]),
+                          line = list(color = "white", width = 1)),
+            text = ~pais, textposition = "top center",
+            textfont = list(size = 9, color = SUAVE),
+            showlegend = FALSE,
+            hovertext = ~sprintf("<b>%s</b><br>Actitud: %.2f (puesto %d de 14)<br>Permisividad: %.2f (puesto %d de 14)",
+                                 pais, actitud, as.integer(rank_actitud),
+                                 permisividad, as.integer(rank_permisividad)),
+            hoverinfo = "text") |>
+  layout(
+    xaxis = list(title = "\u00cdndice de actitud (0\u201310)",
+                 gridcolor = LINEA, zeroline = FALSE, showline = FALSE),
+    yaxis = list(title = "\u00cdndice de permisividad (1\u20134)",
+                 gridcolor = LINEA, zeroline = FALSE, showline = FALSE),
+    hovermode = "closest",
+    margin = list(t = 24, r = 18, b = 44, l = 58),
+    annotations = list(list(
+      x = 1, y = 0.02, xref = "paper", yref = "paper", xanchor = "right",
+      text = sprintf("\u03c1 de Spearman = %.3f", rho_pais),
+      showarrow = FALSE, font = list(size = 10, color = SUAVE)))
+  ) |>
+  config_es()
+```
+
+Row {data-height=60}
+---------------------------------------------------------------------
+
+### Nota metodológica
+
+```{r nota, results='asis'}
+# La nota se situa al final porque su consulta es ocasional, pero se mantiene
+# visible porque, para un equipo que produce informes publicos, saber de donde
+# salen las cifras no es opcional.
+cat(sprintf(
+"**Fuente:** Encuesta Social Europea (ESS ERIC), rondas 1 a 11, trabajo de campo 2002 – 2023/24; extracto propio de 14 países, los presentes en las once rondas (%s entrevistas con índice calculable). &nbsp;·&nbsp; **Ponderación:** todas las medias van ponderadas por `anweight`, reconstruido como `pspwght × pweight` en las rondas 2 y 3, donde falta. &nbsp;·&nbsp; **Índice de actitud:** media de `imbgeco`, `imueclt` e `imwbcnt`, α de Cronbach = 0,844. &nbsp;·&nbsp; **Aviso:** la ronda 10 de Alemania, España, Polonia y Suecia se recogió por autocumplimentación y no cara a cara; su dispersión en 2020 es compatible con un efecto de modo. &nbsp;·&nbsp; **Alcance:** son asociaciones descriptivas sobre muestras transversales repetidas, no estimaciones causales ni predicciones.",
+mil(sum(serie$n))))
+```
+
+Exploración {data-orientation=columns}
+=====================================================================
+
+Column {.sidebar data-width=245}
+---------------------------------------------------------------------
+
+```{r filtros}
+# Los dos conjuntos de datos comparten GRUPO y CLAVE (el pais), de modo que un
+# unico control filtra simultaneamente el grafico temporal y el de perfiles.
+# Es la interaccion de "vistas vinculadas" del Reto 1: el usuario obtiene dos
+# perspectivas del mismo caso sin repetir la seleccion dos veces.
+sd_serie  <- SharedData$new(serie,  key = ~pais, group = "paises")
+sd_perfil <- SharedData$new(perfil, key = ~pais, group = "paises")
+
+filter_checkbox("f_pais", "Países", sd_serie, ~pais, columns = 2)
+```
+
+```{r reiniciar}
+# El estado de los filtros permanece siempre visible y el reinicio revierte el
+# estado completo con un unico control. Es el unico elemento del panel que
+# emplea el color de acento, por ser la unica accion que deshace todo.
+htmltools::tags$button(
+  "Reiniciar filtros",
+  onclick = "location.reload();",
+  class = "btn btn-block btn-sm",
+  style = paste0("background-color:", NARANJA, ";color:white;border:none;",
+                 "margin-top:8px;margin-bottom:14px;")
+)
+```
+
+**Cómo usarlo**
+
+Sin ninguna casilla marcada se muestran los catorce países. Marca dos o tres para comparar trayectorias y perfiles a la vez: la selección afecta a los dos gráficos de esta columna simultáneamente, y **cada país conserva su color** al filtrar.
+
+Bajo el gráfico temporal hay una franja de contexto con la serie completa: arrastra sus extremos para acotar el periodo sin perder de vista el conjunto.
+
+Los pequeños múltiplos de la derecha se muestran siempre con los catorce paneles. Es deliberado: su función es permitir la comparación simultánea de todos los países sobre una escala común, y filtrarlos la destruiría.
+
+Column {data-width=430}
+---------------------------------------------------------------------
+
+### G1 ampliado · Evolución del índice de actitud, con franja de foco y contexto
+
+```{r g1_exploracion}
+# Foco y contexto: el deslizador inferior mantiene visible la serie completa
+# mientras el area principal muestra el tramo seleccionado. Es la materializacion
+# del mantra de Shneiderman -panoramica primero, zoom y filtrado, detalle bajo
+# demanda- sin recurrir al desplazamiento lateral, que haria perder la vista de
+# conjunto y por eso se descarto en el diseno.
+plot_ly(sd_serie, x = ~anio, y = ~media,
+        color = ~pais, colors = PAL_PAIS,
+        type = "scatter", mode = "lines+markers",
+        line = list(width = 2), marker = list(size = 5),
+        text = ~etq, hoverinfo = "text") |>
+  layout(
+    xaxis = c(eje_x_anios, list(rangeslider = list(thickness = 0.14))),
+    yaxis = eje_y_actitud,
+    hovermode = "closest",
+    legend = list(font = list(size = 9)),
+    margin = list(t = 18, r = 10, b = 26, l = 54)
+  ) |>
+  config_es() |>
+  # Destacado de una serie: al hacer clic sobre una linea, las demas se atenuan.
+  # Doble clic deshace la seleccion.
+  highlight(on = "plotly_click", off = "plotly_doubleclick",
+            opacityDim = 0.12)
+```
+
+### Perfil sociodemográfico · Media del índice de actitud por segmento, rondas agrupadas
+
+```{r perfil_segmentos}
+# Se muestran los cuatro segmentadores a la vez en lugar de ofrecer un menu que
+# obligue a recorrerlos de uno en uno. El argumento es el mismo que llevo a
+# descartar la animacion temporal en el Reto 1: una comparacion espacial la
+# resuelve el sistema visual de un vistazo, mientras que recorrer un menu
+# sustituye esa comparacion por otra en la memoria de trabajo.
+gg_perfil <- ggplot(sd_perfil,
+                    aes(x = media, y = nivel, colour = pais, text = etq)) +
+  geom_point(size = 1.9, alpha = .9) +
+  facet_wrap(~ dimension, ncol = 1, scales = "free_y") +
+  scale_colour_manual(values = PAL_PAIS, drop = FALSE, guide = "none") +
+  labs(x = "Índice de actitud (0–10)", y = NULL) +
+  tema +
+  theme(panel.grid.major.y = element_line(colour = LINEA, linewidth = .3),
+        panel.grid.major.x = element_line(colour = LINEA, linewidth = .3),
+        strip.text = element_text(size = 8, colour = SUAVE, hjust = 0),
+        axis.text.y = element_text(size = 7.5))
+
+ggplotly(gg_perfil, tooltip = "text") |>
+  layout(margin = list(l = 100, t = 12), showlegend = FALSE) |>
+  config_es() |>
+  highlight(on = "plotly_click", off = "plotly_doubleclick", opacityDim = 0.12)
+```
+
+Column {data-width=325}
+---------------------------------------------------------------------
+
+### G5 · ¿Va el rechazo con desafección institucional? Depende del país
+
+```{r g5_multiples}
+# Pequenos multiplos con ejes IDENTICOS en los catorce paneles: asi la
+# comparacion entre paises se convierte en una comparacion de posicion sobre una
+# escala comun, la tarea mas precisa de la jerarquia de Cleveland y McGill, y no
+# depende de que el usuario recuerde el panel anterior. Ambas series comparten
+# la escala 0-10, lo que permite representarlas sobre un unico eje vertical y
+# evitar el grafico de doble eje.
+#
+# Se emplea idx_conf_inst3 (parlamento, politicos y sistema legal) y no la
+# version de cuatro items, porque esta ultima incluye trstprt, que no se
+# pregunto en la ronda 1 y dejaria vacio el primer punto de los catorce paneles.
+#
+# Los paneles se ordenan por el nivel medio de actitud del pais, de modo que la
+# posicion dentro de la rejilla aporte informacion ademas de la de cada panel.
+orden_paneles <- cohesion |>
+  group_by(pais) |>
+  summarise(m = mean(actitud), .groups = "drop") |>
+  arrange(desc(m)) |> pull(pais) |> as.character()
+
+gg_g5 <- cohesion |>
+  pivot_longer(c(actitud, conf_inst), names_to = "indicador", values_to = "valor") |>
+  mutate(pais = factor(as.character(pais), levels = orden_paneles),
+         indicador = factor(indicador, levels = c("actitud", "conf_inst"),
+                            labels = c("Actitud hacia la inmigración",
+                                       "Confianza institucional")),
+         etq = sprintf("%s · %d\n%s: %.2f", pais, anio, indicador, valor)) |>
+  ggplot(aes(anio, valor, colour = indicador, group = indicador, text = etq)) +
+  geom_line(linewidth = .5) +
+  geom_point(size = .8) +
+  facet_wrap(~ pais, ncol = 2) +
+  scale_colour_manual(values = c(AZUL, NARANJA)) +
+  scale_x_continuous(breaks = c(2002, 2012, 2023)) +
+  labs(x = NULL, y = "Escala 0–10", colour = NULL) +
+  tema +
+  theme(panel.grid.major.x = element_line(colour = LINEA, linewidth = .3),
+        strip.text = element_text(size = 7.5, colour = TINTA),
+        axis.text = element_text(size = 7),
+        legend.position = "top")
+
+ggplotly(gg_g5, tooltip = "text") |>
+  layout(margin = list(l = 8, t = 52),
+         legend = list(orientation = "h", x = 0, y = 1.045, font = list(size = 9))) |>
+  config_es()
+```

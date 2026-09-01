@@ -1,0 +1,320 @@
+---
+title: "Actitudes hacia la inmigración y cohesión social en Europa"
+subtitle: "Informe técnico · M8 Visualización de datos y Reproducibilidad · Reto 2"
+author: "Pamela Valembois Madrigal · Máster en Behavioral Data Science, Universitat de Barcelona"
+date: "`r local({m <- c('enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'); d <- Sys.Date(); sprintf('%d de %s de %d', as.integer(format(d,'%d')), m[as.integer(format(d,'%m'))], as.integer(format(d,'%Y')))})`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: true
+    toc: false
+    fig_caption: true
+geometry: margin=2.5cm
+fontsize: 11pt
+---
+
+```{r configuracion, include=FALSE}
+# =============================================================================
+# M8 - Visualizacion de datos y Reproducibilidad | Reto 2
+# Informe tecnico generado con knitr
+#
+# Requisitos previos: haber ejecutado 01_importar_depurar.R y 02_eda.R.
+# Igual que el dashboard, este informe NO recalcula ninguna media: lee las
+# tablas agregadas del script 02. Todas las cifras que aparecen en el texto
+# estan insertadas mediante codigo en linea, de modo que es imposible que el
+# texto y las tablas discrepen.
+#
+# Como generarlo (con m8_reto2.Rproj abierto):
+#   rmarkdown::render(here::here("3_informe", "codigo", "informe.Rmd"),
+#                     output_file = "informe.pdf",
+#                     output_dir  = here::here("3_informe"))
+# =============================================================================
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.align = "center", dpi = 200)
+
+library(here); library(dplyr); library(tidyr); library(readr)
+library(ggplot2); library(knitr)
+
+source(here("1_datos", "2_codigo", "00_comun.R"), encoding = "UTF-8")
+
+TAB <- here("1_datos", "4_salidas", "tablas")
+if (!file.exists(file.path(TAB, "02_serie_temporal_pais.csv"))) {
+  stop("Faltan las tablas agregadas. Ejecuta antes 01_importar_depurar.R y 02_eda.R.",
+       call. = FALSE)
+}
+leer <- function(x) read_csv(file.path(TAB, x), show_col_types = FALSE)
+
+serie       <- leer("02_serie_temporal_pais.csv")
+dispersion  <- leer("02_dispersion_entre_paises.csv")
+gradiente   <- leer("02_gradiente_educativo.csv")
+dos_indices <- leer("02_dos_indices_pais.csv")
+cor_cohes   <- leer("02_cor_cohesion_por_pais.csv")
+alfa        <- leer("02_alfa_cronbach.csv")
+cifras      <- leer("02_cifras_destacadas.csv")
+
+cif <- function(clave) cifras$valor[cifras$clave == clave]
+
+# Formato numerico espanol: coma decimal y punto de millar. Se aplica a TODAS
+# las cifras del texto para que la notacion sea homogenea.
+n1 <- function(x, d = 2) formatC(x, format = "f", digits = d, decimal.mark = ",")
+nm <- function(x) formatC(x, format = "d", big.mark = ".", decimal.mark = ",")
+
+# El pie de la tabla 1 se define aqui, y no dentro del bloque visible, para que
+# el codigo que se muestra en el informe quepa en el ancho de la pagina.
+pie_tabla <- paste(
+  "Indicadores por país. Medias ponderadas del índice de actitud (0--10).",
+  "El gradiente educativo es la diferencia entre el nivel educativo alto y el",
+  "bajo. La última columna es la correlación de Spearman entre actitud y",
+  "confianza institucional a lo largo de las once rondas.")
+
+# --- Cifras que se insertan en el texto --------------------------------------
+media_2023 <- cif("media_2023")
+cambio     <- cif("cambio_2002_2023")
+amplitud   <- cif("amplitud_2023")
+
+dt_2002 <- dispersion$dt[dispersion$anio == 2002]
+dt_2023 <- dispersion$dt[dispersion$anio == 2023]
+
+hu <- filter(serie, cntry == "HU")
+hu_2002 <- hu$media[hu$anio == 2002]
+hu_2023 <- hu$media[hu$anio == 2023]
+hu_caida <- hu$media[hu$anio == 2016] - hu$media[hu$anio == 2014]
+
+# Paises que suben y que bajan entre la primera y la ultima ronda
+cambio_pais <- serie |>
+  filter(anio %in% c(2002, 2023)) |>
+  select(cntry, anio, media) |>
+  pivot_wider(names_from = anio, values_from = media, names_prefix = "a") |>
+  mutate(delta = a2023 - a2002) |>
+  arrange(desc(delta))
+n_suben <- sum(cambio_pais$delta > 0)
+n_bajan <- sum(cambio_pais$delta < 0)
+
+grad_min <- gradiente[which.min(gradiente$diferencia), ]
+grad_max <- gradiente[which.max(gradiente$diferencia), ]
+n_monotonos <- sum(gradiente$monotono)
+
+rho_indices <- cor(dos_indices$actitud, dos_indices$permisividad, method = "spearman")
+fi <- filter(dos_indices, cntry == "FI")
+de <- filter(dos_indices, cntry == "DE")
+
+coh_max <- cor_cohes[which.max(cor_cohes$rho), ]
+coh_min <- cor_cohes[which.min(cor_cohes$rho), ]
+n_coh_neg <- sum(cor_cohes$rho < 0)
+
+alfa_actitud <- alfa$alpha[grepl("Actitud", alfa$indice)]
+alfa_permis  <- alfa$alpha[grepl("Permisividad", alfa$indice)]
+n_total_idx  <- sum(serie$n)
+```
+
+# Objetivos del proyecto
+
+**Objetivo principal.** Proporcionar al equipo de análisis de un observatorio de
+migraciones europeo una herramienta que permita describir y comparar la evolución
+de las actitudes hacia la inmigración en catorce países europeos a lo largo de dos
+décadas, identificando los patrones comunes, las divergencias nacionales y los
+segmentos de población que las sustentan.
+
+**Objetivos específicos.**
+
+1. Situar la trayectoria de cada país en el contexto europeo.
+2. Determinar si el conjunto de países converge o diverge.
+3. Caracterizar los segmentos sociodemográficos asociados a cada posición.
+4. Establecer en qué medida las actitudes migratorias se vinculan con indicadores
+   más amplios de cohesión social.
+
+Estos objetivos delimitan también el alcance de la herramienta: describe
+asociaciones observadas en muestras transversales repetidas, sin pretensión de
+inferencia causal ni de predicción.
+
+# Datos y depuración
+
+Los datos proceden de la **Encuesta Social Europea** (ESS ERIC), rondas 1 a 11,
+con trabajo de campo entre 2002 y 2023/24. Se construyó un extracto propio con el
+*Data Wizard* del portal del ESS, restringido a los **14 países presentes en las
+once rondas**, de modo que la matriz país × ronda no tiene huecos y toda
+comparación temporal se realiza sobre el mismo conjunto de países. El extracto
+contiene 290.398 entrevistas y 49 variables.
+
+La depuración, íntegramente reproducible en
+`1_datos/2_codigo/01_importar_depurar.R`, resolvió cinco incidencias relevantes.
+La más determinante es que el peso de análisis `anweight` —el que la documentación
+del ESS exige emplear al comparar entre países o rondas— falta al cien por cien en
+las rondas 2 y 3. Se reconstruyó como el producto `pspwght × pweight`, definición
+que la propia documentación establece y que se verificó empíricamente en las nueve
+rondas donde ambos coexisten. Sin esa reconstrucción, cualquier cálculo ponderado
+habría eliminado 53.442 casos. En segundo lugar, las variables de año de entrevista
+faltan en cuatro rondas, por lo que el eje temporal se derivó de `essround`; el
+intervalo resultante **no es regular**, ya que la ronda 10 se retrasó por la
+pandemia y la 11 corresponde a 2023/24, y por eso el año se trata siempre como
+escala cuantitativa y nunca como categoría equiespaciada.
+
+Sobre los ítems depurados se construyeron dos índices compuestos: el **índice de
+actitud** (valoración del impacto de la inmigración sobre la economía, la vida
+cultural y la calidad de vida del país, escala 0–10,
+$\alpha$ de Cronbach = `r n1(alfa_actitud, 3)`) y el **índice de permisividad**
+(disposición a admitir nuevos flujos, escala 1–4 invertida,
+$\alpha$ = `r n1(alfa_permis, 3)`). Todas las medias de este informe van
+ponderadas por `anweight` y se calculan sobre las `r nm(n_total_idx)` entrevistas
+con índice de actitud calculable.
+
+# Resultados
+
+## Tabla resumen
+
+La tabla 1 reúne, para cada país, los cuatro indicadores que responden a los
+objetivos específicos: el nivel inicial y final del índice de actitud, su
+variación, la magnitud del gradiente educativo y la correlación temporal entre
+actitud y confianza institucional.
+
+```{r tabla-resumen, echo=TRUE}
+tabla <- cambio_pais |>
+  left_join(select(gradiente, cntry, grad = diferencia), by = "cntry") |>
+  left_join(select(cor_cohes, cntry, rho), by = "cntry") |>
+  mutate(pais = unname(PAIS_NOMBRE[cntry])) |>
+  arrange(desc(delta)) |>
+  select(`País` = pais, `2002` = a2002, `2023` = a2023,
+         Cambio = delta, `Gradiente educativo` = grad,
+         `$\\rho$ actitud--confianza` = rho)
+
+kable(tabla, booktabs = TRUE, digits = 2, linesep = "", escape = FALSE,
+      caption = pie_tabla, format.args = list(decimal.mark = ","))
+```
+
+## El gráfico principal
+
+```{r fig-serie, echo=TRUE, fig.width=8.4, fig.height=4.6, fig.cap="Evolución del índice de actitud hacia la inmigración, 2002-2023. Media ponderada. Once países en gris como contexto; en color, los tres casos de mayor interés. La línea de puntos marca la crisis de refugiados de 2015."}
+serie_g <- mutate(serie, destacado = cntry %in% DESTACADOS)
+
+ggplot() +
+  # Once paises en gris neutro: el contexto sin el cual una trayectoria
+  # individual no significa nada, pero sin competir por la mirada.
+  geom_line(data = filter(serie_g, !destacado),
+            aes(anio, media, group = cntry), colour = GRIS, linewidth = .45) +
+  geom_line(data = filter(serie_g, destacado),
+            aes(anio, media, colour = cntry), linewidth = .9) +
+  geom_point(data = filter(serie_g, destacado),
+             aes(anio, media, colour = cntry), size = 1.7) +
+  geom_vline(xintercept = 2015, linetype = "dotted", colour = "#a8a7a2") +
+  scale_colour_manual(values = PAIS_COLOR[DESTACADOS],
+                      labels = PAIS_NOMBRE[DESTACADOS]) +
+  scale_x_continuous(breaks = ANIOS) +
+  labs(x = NULL, y = "Índice de actitud (0-10)", colour = NULL) +
+  tema + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Hallazgos
+
+**La trayectoria de cada país en el contexto europeo.** `r n_suben` de los catorce países registran en 2023 una actitud más favorable
+que en 2002. La media europea pasa de
+`r n1(dispersion$media_eu[dispersion$anio == 2002])` a `r n1(media_2023)` puntos,
+un cambio de `r n1(cambio)` puntos en dos décadas. El movimiento no es, sin
+embargo, común a todos: **Hungría es la única excepción**, con un descenso desde
+`r n1(hu_2002)` hasta `r n1(hu_2023)` y una caída de `r n1(abs(hu_caida))` puntos
+concentrada entre 2014 y 2016, coincidiendo con la crisis de refugiados de 2015 y
+la campaña gubernamental subsiguiente. En el extremo opuesto,
+`r unname(PAIS_NOMBRE[cambio_pais$cntry[1]])` es el país que más avanza, con
+`r n1(cambio_pais$delta[1])` puntos.
+
+**Convergencia o divergencia.** Los países europeos **divergen**. Aunque la media
+sube, la dispersión entre países sube también: la desviación típica de las medias
+nacionales pasa de `r n1(dt_2002, 3)` en 2002 a `r n1(dt_2023, 3)` en 2023, y la
+distancia entre el país más abierto y el más restrictivo se ensancha hasta
+`r n1(amplitud)` puntos. Es decir, el promedio europeo esconde trayectorias que se
+separan, y cualquier lectura basada únicamente en la media agregada sería engañosa.
+
+**El perfil sociodemográfico.** El nivel educativo es la asociación mejor
+sustentada de todo el análisis. El gradiente es **monótono en los
+`r n_monotonos` países sin excepción**: en todos ellos el nivel educativo alto
+presenta una actitud más favorable que el medio, y este más que el bajo. Su
+magnitud varía entre `r n1(grad_min$diferencia)` puntos en
+`r unname(PAIS_NOMBRE[grad_min$cntry])` y `r n1(grad_max$diferencia)` en
+`r unname(PAIS_NOMBRE[grad_max$cntry])`, y se mantiene incluso en Hungría, donde
+alcanza
+`r n1(gradiente$diferencia[gradiente$cntry == "HU"])` puntos. La edad, la
+autoubicación ideológica y la religiosidad, en cambio, presentan asociaciones
+débiles o nulas con la medida focal.
+
+**Valoración frente a permisividad.** Los dos índices miden constructos distintos
+—la valoración del impacto de la inmigración ya producida y la disposición a
+admitir nueva inmigración— y **no coinciden**. A nivel de país su correlación de
+Spearman es $\rho$ = `r n1(rho_indices, 3)`, un solapamiento solo parcial. El caso
+más ilustrativo es Finlandia, que ocupa el puesto
+`r as.integer(fi$rank_actitud)` de 14 en valoración pero el
+`r as.integer(fi$rank_permisividad)` en permisividad; Alemania presenta el patrón
+inverso, con el puesto `r as.integer(de$rank_actitud)` en valoración y el
+`r as.integer(de$rank_permisividad)` en permisividad. Valorar positivamente la
+inmigración y querer admitir más inmigrantes no son, por tanto, la misma actitud.
+
+**El vínculo con la cohesión institucional.** La respuesta **depende del país**, y
+esa es precisamente la conclusión sustantiva. La correlación temporal entre el
+índice de actitud y la confianza institucional a lo largo de las once rondas va
+desde `r n1(coh_max$rho, 2)` en `r coh_max$pais` hasta
+`r n1(coh_min$rho, 2)` en `r coh_min$pais`; en `r n_coh_neg` de los catorce países
+es negativa. No existe, pues, un patrón europeo único que permita afirmar que el
+rechazo a la inmigración acompaña sistemáticamente a una desafección institucional
+más amplia: en unos países ambas series se mueven juntas y en otros se mueven en
+sentidos opuestos.
+
+# Limitaciones
+
+El extracto contiene 14 de los más de 30 países que han participado en el ESS, por
+lo que las conclusiones no son extensibles a Europa en su conjunto. La ronda 10 de
+Alemania, España, Polonia y Suecia se recogió mediante cuestionario
+autoadministrado y no por entrevista presencial; los cuatro países afectados
+presentan en 2020 una dispersión sensiblemente mayor que los diez restantes, un
+patrón compatible con un efecto de modo, por lo que ese punto debe leerse con
+cautela. Finalmente, el diseño es transversal repetido: cada ronda entrevista a
+muestras nuevas e independientes, de modo que los datos permiten seguir la
+evolución de poblaciones, no de individuos, y ninguna de las asociaciones descritas
+admite lectura causal.
+
+# Reproducibilidad
+
+Todo el proyecto se encuentra en el repositorio, organizado en cuatro bloques:
+datos, dashboard, informe y presentación. No existe ninguna referencia a
+directorios locales: las rutas se construyen con el paquete `here`, que ancla la
+raíz del proyecto en el fichero `m8_reto2.Rproj`. La cadena de ejecución es:
+
+```
+01_importar_depurar.R  ->  ess_clean.rds
+02_eda.R               ->  figuras (.png) y tablas agregadas (.csv)
+dashboard.Rmd | informe.Rmd | presentacion.Rmd   (leen esas tablas)
+```
+
+Las tres salidas finales leen las **mismas** tablas agregadas y ninguna recalcula
+las medias por su cuenta, de manera que el dashboard, este informe y la
+presentación no pueden discrepar entre sí. Los ficheros del ESS se reeditan de
+forma continua, por lo que el anexo del informe del Reto 1 fija la edición y el DOI
+de cada ronda utilizada; sin ese dato, la reproducción exacta no estaría
+garantizada.
+
+```{r sesion, echo=TRUE}
+# La informacion de sesion documenta el entorno exacto con el que se compilo
+# este informe, requisito minimo de cualquier resultado reproducible.
+si <- sessionInfo()
+cat("R:", si$R.version$version.string, "\n")
+cat("Plataforma:", si$platform, "\n")
+cat("Paquetes:", paste(sort(names(si$otherPkgs)), collapse = ", "), "\n")
+```
+
+# Referencias
+
+Bertin, J. (1983). *Semiology of graphics: Diagrams, networks, maps*. University of
+Wisconsin Press.
+
+Cleveland, W. S., y McGill, R. (1984). Graphical perception: Theory,
+experimentation, and application to the development of graphical methods.
+*Journal of the American Statistical Association, 79*(387), 531–554.
+
+European Social Survey European Research Infrastructure (ESS ERIC). (2024).
+*ESS rondas 1–11, ficheros integrados* [Conjunto de datos]. Sikt – Norwegian
+Agency for Shared Services in Education and Research. https://ess.sikt.no
+
+Shneiderman, B. (1996). The eyes have it: A task by data type taxonomy for
+information visualizations. En *Proceedings of the IEEE Symposium on Visual
+Languages* (pp. 336–343). IEEE.
+
+Ware, C. (2020). *Information visualization: Perception for design* (4.ª ed.).
+Morgan Kaufmann.
