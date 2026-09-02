@@ -6,7 +6,7 @@ Proyecto de Ciencia de Datos sobre las actitudes hacia la inmigración en catorc
 **Módulo 8 — Visualización de datos y Reproducibilidad**  
 Máster en Behavioral Data Science · Universitat de Barcelona  
 Docentes: Mireia Ribera y David Leiva
-
+**Repositorio:** https://github.com/pvalembois/ValemboisP_m8_reto2
 ------------------------------------------------------------------------
 
 ## Objetivos del proyecto
