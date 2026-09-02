@@ -1,0 +1,211 @@
+dimension,nivel,cntry,pais,media,n
+Nivel educativo,Alto,BE,Bélgica,5.806731595411383,7196
+Nivel educativo,Bajo,BE,Bélgica,4.652240650675096,5380
+Nivel educativo,Medio,BE,Bélgica,5.0760209625978785,5834
+Nivel educativo,Alto,CH,Suiza,6.546463951990927,5875
+Nivel educativo,Bajo,CH,Suiza,5.523394183739581,3620
+Nivel educativo,Medio,CH,Suiza,5.65349463017151,7801
+Nivel educativo,Alto,DE,Alemania,6.180813094016543,14509
+Nivel educativo,Bajo,DE,Alemania,5.033326200061597,4219
+Nivel educativo,Medio,DE,Alemania,5.159629616736879,15936
+Nivel educativo,Alto,ES,España,6.364176615574964,6118
+Nivel educativo,Bajo,ES,España,5.218098129190979,9993
+Nivel educativo,Medio,ES,España,6.070718785432978,3277
+Nivel educativo,Alto,FI,Finlandia,6.604294556237447,5923
+Nivel educativo,Bajo,FI,Finlandia,5.65111316845474,2752
+Nivel educativo,Medio,FI,Finlandia,5.783805938029037,4008
+Nivel educativo,Alto,FR,Francia,6.039736037997419,5528
+Nivel educativo,Bajo,FR,Francia,4.4469106935864575,4323
+Nivel educativo,Medio,FR,Francia,4.811498038991035,7060
+Nivel educativo,Alto,HU,Hungría,4.713277240134024,3356
+Nivel educativo,Bajo,HU,Hungría,3.7299262454255544,3557
+Nivel educativo,Medio,HU,Hungría,4.056128959186627,9141
+Nivel educativo,Alto,IE,Irlanda,6.510141125295449,7027
+Nivel educativo,Bajo,IE,Irlanda,4.986822990456302,5001
+Nivel educativo,Medio,IE,Irlanda,5.650454699157429,3468
+Nivel educativo,Alto,NL,Países Bajos,6.143112668347453,6289
+Nivel educativo,Bajo,NL,Países Bajos,5.115019389786788,7041
+Nivel educativo,Medio,NL,Países Bajos,5.521684466607985,5649
+Nivel educativo,Alto,NO,Noruega,6.269251206017466,8008
+Nivel educativo,Bajo,NO,Noruega,5.188870317842663,2851
+Nivel educativo,Medio,NO,Noruega,5.4025826234385095,6073
+Nivel educativo,Alto,PL,Polonia,6.226179490397897,4288
+Nivel educativo,Bajo,PL,Polonia,5.389912497990077,5356
+Nivel educativo,Medio,PL,Polonia,5.769993299362613,6728
+Nivel educativo,Alto,PT,Portugal,6.209094802564147,2268
+Nivel educativo,Bajo,PT,Portugal,4.983323660478128,7179
+Nivel educativo,Medio,PT,Portugal,5.634905278611501,2413
+Nivel educativo,Alto,SE,Suecia,6.80860088525695,5567
+Nivel educativo,Bajo,SE,Suecia,5.647227319524187,2172
+Nivel educativo,Medio,SE,Suecia,5.979181250794191,3443
+Nivel educativo,Alto,SI,Eslovenia,5.63284713502705,3213
+Nivel educativo,Bajo,SI,Eslovenia,4.124094137802675,3018
+Nivel educativo,Medio,SI,Eslovenia,4.561823680340708,7314
+Grupo de edad,15-29,BE,Bélgica,5.480259352895639,4135
+Grupo de edad,30-44,BE,Bélgica,5.387596982992285,4511
+Grupo de edad,45-59,BE,Bélgica,5.104800011624307,4748
+Grupo de edad,60-74,BE,Bélgica,4.87830924281591,3543
+Grupo de edad,75+,BE,Bélgica,4.7043862206723785,1499
+Grupo de edad,15-29,CH,Suiza,5.79487827573968,3105
+Grupo de edad,30-44,CH,Suiza,6.136863337035032,4601
+Grupo de edad,45-59,CH,Suiza,6.053021101282676,4495
+Grupo de edad,60-74,CH,Suiza,5.784759274872382,3550
+Grupo de edad,75+,CH,Suiza,5.606597807259651,1553
+Grupo de edad,15-29,DE,Alemania,5.778978659042022,6431
+Grupo de edad,30-44,DE,Alemania,5.541695800403325,7830
+Grupo de edad,45-59,DE,Alemania,5.4696902029243,9463
+Grupo de edad,60-74,DE,Alemania,5.182044746341167,7875
+Grupo de edad,75+,DE,Alemania,5.111774531842729,2946
+Grupo de edad,15-29,ES,España,5.871930511093541,3911
+Grupo de edad,30-44,ES,España,5.937201621407058,5312
+Grupo de edad,45-59,ES,España,5.780340151221248,5073
+Grupo de edad,60-74,ES,España,5.396745155606184,3553
+Grupo de edad,75+,ES,España,5.135766996152061,1599
+Grupo de edad,15-29,FI,Finlandia,6.057048923042259,4000
+Grupo de edad,30-44,FI,Finlandia,6.157514040522645,4531
+Grupo de edad,45-59,FI,Finlandia,6.123607484597462,5256
+Grupo de edad,60-74,FI,Finlandia,5.992237195326931,4814
+Grupo de edad,75+,FI,Finlandia,5.6577531800838115,1993
+Grupo de edad,15-29,FR,Francia,5.476007119048739,3336
+Grupo de edad,30-44,FR,Francia,5.347848302999417,4957
+Grupo de edad,45-59,FR,Francia,4.912808987273593,5241
+Grupo de edad,60-74,FR,Francia,4.496003626613256,4490
+Grupo de edad,75+,FR,Francia,4.200678825397387,2119
+Grupo de edad,15-29,HU,Hungría,4.367742473778758,2973
+Grupo de edad,30-44,HU,Hungría,4.145141438375454,3900
+Grupo de edad,45-59,HU,Hungría,4.0656849600540275,4211
+Grupo de edad,60-74,HU,Hungría,4.004860472863246,3580
+Grupo de edad,75+,HU,Hungría,3.794184031304996,1425
+Grupo de edad,15-29,IE,Irlanda,5.7838485520965435,3802
+Grupo de edad,30-44,IE,Irlanda,6.012036031284482,6285
+Grupo de edad,45-59,IE,Irlanda,5.75667269025967,5639
+Grupo de edad,60-74,IE,Irlanda,5.625789349643512,5021
+Grupo de edad,75+,IE,Irlanda,5.531854343907573,2016
+Grupo de edad,15-29,NL,Países Bajos,5.634498962512977,2976
+Grupo de edad,30-44,NL,Países Bajos,5.5969893702738975,4883
+Grupo de edad,45-59,NL,Países Bajos,5.578834526786673,5166
+Grupo de edad,60-74,NL,Países Bajos,5.531527638796579,4310
+Grupo de edad,75+,NL,Países Bajos,5.292532632678509,1684
+Grupo de edad,15-29,NO,Noruega,5.61032188801752,3545
+Grupo de edad,30-44,NO,Noruega,5.881923842705341,4524
+Grupo de edad,45-59,NO,Noruega,5.818411930389124,4624
+Grupo de edad,60-74,NO,Noruega,5.576932308176504,3100
+Grupo de edad,75+,NO,Noruega,5.237991281771615,1176
+Grupo de edad,15-29,PL,Polonia,5.82807004671395,4324
+Grupo de edad,30-44,PL,Polonia,5.873461756378544,4013
+Grupo de edad,45-59,PL,Polonia,5.821423640463711,4007
+Grupo de edad,60-74,PL,Polonia,5.597804672708633,3046
+Grupo de edad,75+,PL,Polonia,5.242690094928817,967
+Grupo de edad,15-29,PT,Portugal,5.387565954759012,2660
+Grupo de edad,30-44,PT,Portugal,5.169741733946862,3944
+Grupo de edad,45-59,PT,Portugal,5.135840875052142,4008
+Grupo de edad,60-74,PT,Portugal,5.012455051450259,4054
+Grupo de edad,75+,PT,Portugal,4.807499989400097,1966
+Grupo de edad,15-29,SE,Suecia,6.283493170250878,3543
+Grupo de edad,30-44,SE,Suecia,6.456729831756175,4356
+Grupo de edad,45-59,SE,Suecia,6.303503175013822,4442
+Grupo de edad,60-74,SE,Suecia,6.156988258480729,4228
+Grupo de edad,75+,SE,Suecia,5.711582251229851,1838
+Grupo de edad,15-29,SI,Eslovenia,4.922584002783367,3013
+Grupo de edad,30-44,SI,Eslovenia,4.853803899167658,3220
+Grupo de edad,45-59,SI,Eslovenia,4.6954899484639965,3515
+Grupo de edad,60-74,SI,Eslovenia,4.469287808066931,2734
+Grupo de edad,75+,SI,Eslovenia,4.17288198503591,1068
+Sexo,Hombre,BE,Bélgica,5.246926072768009,9218
+Sexo,Mujer,BE,Bélgica,5.1087375606907814,9281
+Sexo,Hombre,CH,Suiza,6.008290099455099,8535
+Sexo,Mujer,CH,Suiza,5.855954906283629,8811
+Sexo,Hombre,DE,Alemania,5.495871204025342,17638
+Sexo,Mujer,DE,Alemania,5.4141599074789655,17160
+Sexo,Hombre,ES,España,5.843326928755809,9703
+Sexo,Mujer,ES,España,5.60814110275978,9794
+Sexo,Hombre,FI,Finlandia,5.888747308981893,10105
+Sexo,Mujer,FI,Finlandia,6.195538247572969,10489
+Sexo,Hombre,FR,Francia,5.082338178585186,9457
+Sexo,Mujer,FR,Francia,4.916785094735861,10697
+Sexo,Hombre,HU,Hungría,4.169452238615441,7047
+Sexo,Mujer,HU,Hungría,4.073427151399576,9084
+Sexo,Hombre,IE,Irlanda,5.974685234078173,10740
+Sexo,Mujer,IE,Irlanda,5.6319915784326575,12225
+Sexo,Hombre,NL,Países Bajos,5.588820084711236,8882
+Sexo,Mujer,NL,Países Bajos,5.546331316858066,10161
+Sexo,Hombre,NO,Noruega,5.627969957755602,8978
+Sexo,Mujer,NO,Noruega,5.769307819165362,8023
+Sexo,Hombre,PL,Polonia,5.806282188895929,8067
+Sexo,Mujer,PL,Polonia,5.717522933567906,8401
+Sexo,Hombre,PT,Portugal,5.244550628959775,7135
+Sexo,Mujer,PT,Portugal,5.056248389173021,9509
+Sexo,Hombre,SE,Suecia,6.085130417732524,9311
+Sexo,Mujer,SE,Suecia,6.434268897174775,9119
+Sexo,Hombre,SI,Eslovenia,4.71416837145936,6429
+Sexo,Mujer,SI,Eslovenia,4.690408618387717,7125
+Habitat,Campo,BE,Bélgica,4.915152578372447,962
+Habitat,Ciudad grande,BE,Bélgica,5.667780812194176,2455
+Habitat,Ciudad pequeña,BE,Bélgica,5.141813725033662,4450
+Habitat,Periferia de ciudad,BE,Bélgica,5.306046180790317,1916
+Habitat,Pueblo,BE,Bélgica,5.0307070837459404,8710
+Habitat,Campo,CH,Suiza,5.238751262820997,796
+Habitat,Ciudad grande,CH,Suiza,6.538136369843818,1422
+Habitat,Ciudad pequeña,CH,Suiza,6.212548062904353,4195
+Habitat,Periferia de ciudad,CH,Suiza,6.1756666888979765,1777
+Habitat,Pueblo,CH,Suiza,5.725163632845792,9152
+Habitat,Campo,DE,Alemania,5.288400402457379,779
+Habitat,Ciudad grande,DE,Alemania,5.919421251072723,6129
+Habitat,Ciudad pequeña,DE,Alemania,5.367484648350217,12607
+Habitat,Periferia de ciudad,DE,Alemania,5.606975110952271,4690
+Habitat,Pueblo,DE,Alemania,5.240125440321218,10627
+Habitat,Campo,ES,España,5.132974738738546,486
+Habitat,Ciudad grande,ES,España,5.99849166671457,4096
+Habitat,Ciudad pequeña,ES,España,5.862149894385545,5817
+Habitat,Periferia de ciudad,ES,España,5.9383078791034904,1338
+Habitat,Pueblo,ES,España,5.479944291501565,7709
+Habitat,Campo,FI,Finlandia,5.667781557129375,3956
+Habitat,Ciudad grande,FI,Finlandia,6.5328996239486345,3911
+Habitat,Ciudad pequeña,FI,Finlandia,5.999884061553027,6214
+Habitat,Periferia de ciudad,FI,Finlandia,6.296102703470037,2702
+Habitat,Pueblo,FI,Finlandia,5.812428044653091,3797
+Habitat,Campo,FR,Francia,4.54590947965415,1238
+Habitat,Ciudad grande,FR,Francia,5.5899644693472075,3715
+Habitat,Ciudad pequeña,FR,Francia,4.964230243136935,6671
+Habitat,Periferia de ciudad,FR,Francia,5.39613667846445,2485
+Habitat,Pueblo,FR,Francia,4.591441405027129,6037
+Habitat,Campo,HU,Hungría,3.8748956771957053,150
+Habitat,Ciudad grande,HU,Hungría,4.300165185184187,4186
+Habitat,Ciudad pequeña,HU,Hungría,4.143041075413859,5393
+Habitat,Periferia de ciudad,HU,Hungría,4.271649096187398,592
+Habitat,Pueblo,HU,Hungría,3.915900703068287,5795
+Habitat,Campo,IE,Irlanda,5.402709780493694,6642
+Habitat,Ciudad grande,IE,Irlanda,6.502008925057853,1797
+Habitat,Ciudad pequeña,IE,Irlanda,5.845993244918887,6050
+Habitat,Periferia de ciudad,IE,Irlanda,6.080064912536082,5202
+Habitat,Pueblo,IE,Irlanda,5.610649268939886,3294
+Habitat,Campo,NL,Países Bajos,5.25336310242377,811
+Habitat,Ciudad grande,NL,Países Bajos,5.862357189931358,3812
+Habitat,Ciudad pequeña,NL,Países Bajos,5.596862356430451,4861
+Habitat,Periferia de ciudad,NL,Países Bajos,5.692270653612704,1960
+Habitat,Pueblo,NL,Países Bajos,5.4174968115109765,7574
+Habitat,Campo,NO,Noruega,5.357054701528342,3122
+Habitat,Ciudad grande,NO,Noruega,6.273718411935702,2602
+Habitat,Ciudad pequeña,NO,Noruega,5.751250970399589,4701
+Habitat,Periferia de ciudad,NO,Noruega,5.836743302996402,3059
+Habitat,Pueblo,NO,Noruega,5.435159739009916,3500
+Habitat,Campo,PL,Polonia,5.731297885420173,163
+Habitat,Ciudad grande,PL,Polonia,6.038660543732532,4011
+Habitat,Ciudad pequeña,PL,Polonia,5.821303505171465,5314
+Habitat,Periferia de ciudad,PL,Polonia,5.870348634539775,695
+Habitat,Pueblo,PL,Polonia,5.549585745544357,6192
+Habitat,Campo,PT,Portugal,5.444171644803089,155
+Habitat,Ciudad grande,PT,Portugal,5.375563596682751,4010
+Habitat,Ciudad pequeña,PT,Portugal,5.178886626064104,5196
+Habitat,Periferia de ciudad,PT,Portugal,5.426491429767934,2653
+Habitat,Pueblo,PT,Portugal,4.8577756443144295,4565
+Habitat,Campo,SE,Suecia,5.918298362619667,1996
+Habitat,Ciudad grande,SE,Suecia,6.720712223877285,2640
+Habitat,Ciudad pequeña,SE,Suecia,6.228748498701522,6354
+Habitat,Periferia de ciudad,SE,Suecia,6.405181654121271,4134
+Habitat,Pueblo,SE,Suecia,5.928806798296106,3289
+Habitat,Campo,SI,Eslovenia,3.9728200281134343,1056
+Habitat,Ciudad grande,SI,Eslovenia,5.454330277278809,1478
+Habitat,Ciudad pequeña,SI,Eslovenia,5.026733720946108,2909
+Habitat,Periferia de ciudad,SI,Eslovenia,4.9020717153751905,1786
+Habitat,Pueblo,SI,Eslovenia,4.433149072326486,6311

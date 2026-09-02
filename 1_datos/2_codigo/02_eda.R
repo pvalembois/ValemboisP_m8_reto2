@@ -2,8 +2,6 @@
 # M8 - Visualizacion de datos y Reproducibilidad | Reto 2
 # Script 02: Analisis Exploratorio de Datos (EDA) y figuras del proyecto
 #
-# Cubre el analisis exploratorio que sustenta el diseno del Reto 1 y genera
-# TODAS las figuras que aparecen en el informe del Reto 1 y en el dashboard:
 #   1. Descripcion global del conjunto y de cada campo
 #   2. Estadisticos descriptivos univariantes
 #   3. Valores ausentes y casos completos
@@ -17,12 +15,8 @@
 #          1_datos/1_original/Datafile-subset.sav (para los outliers PRE-depuracion)
 # Salidas: 1_datos/4_salidas/figuras/*.png  y  1_datos/4_salidas/tablas/*.csv
 #
-# NOTA METODOLOGICA: se emplea la correlacion de SPEARMAN y no la de Pearson.
-# La practica totalidad de las variables sustantivas del ESS son ordinales
-# (escalas Likert de 0-10 y de 1-4), por lo que un coeficiente basado en rangos
-# es el estadistico apropiado. Se verifico que la diferencia respecto a Pearson
-# es en todos los casos inferior a 0,02, de modo que las conclusiones no cambian;
-# la eleccion responde a correccion metodologica, no a diferencia de resultado.
+# Nota: se usa la correlacion de Spearman.
+# Casi todas las variables sustantivas del ESS son ordinales (escalas Likert de 0-10 y de 1-4).
 # =============================================================================
 
 library(here); library(dplyr); library(tidyr); library(ggplot2)
@@ -34,12 +28,6 @@ source(here("1_datos", "2_codigo", "00_comun.R"), encoding = "UTF-8")
 ess   <- readRDS(here("1_datos", "3_depurada", "ess_clean.rds"))
 crudo <- haven::read_sav(here("1_datos", "1_original", "Datafile-subset.sav"))
 
-# IMPORTANTE: haven devuelve las columnas del .sav con clase 'haven_labelled'.
-# Esa clase conserva las etiquetas de SPSS (util para documentar), pero rompe o
-# emite avisos en funciones que esperan vectores numericos puros: cor(),
-# psych::alpha() y la aritmetica de inversion de escalas. Se crea por tanto una
-# copia sin etiquetas para todo el analisis numerico, conservando 'ess' con las
-# etiquetas intactas para las tablas y los factores.
 ess_num <- haven::zap_labels(ess)
 
 FIG <- here("1_datos", "4_salidas", "figuras")
@@ -67,18 +55,13 @@ cat("Paises:", n_distinct(ess$cntry), "| Rondas:", n_distinct(ess$essround), "\n
 
 glimpse(ess[, 1:15])
 
-# skim() produce el resumen completo de todas las variables (tipo, n, missing,
-# media, sd, cuartiles e histograma en texto). Es la fotografia global del
-# fichero. Se envuelve en requireNamespace para que la ausencia de un paquete
-# auxiliar no interrumpa la ejecucion del resto del analisis.
 if (requireNamespace("skimr", quietly = TRUE)) {
   resumen_skim <- skimr::skim(ess_num)
   print(resumen_skim)
   write_csv(as.data.frame(resumen_skim), file.path(TAB, "02_skim_global.csv"))
 }
 
-# Matriz de cobertura pais x ronda: demuestra que no hay huecos y documenta el
-# criterio de seleccion ("paises presentes en las 11 rondas").
+# Matriz de cobertura pais x ronda
 cobertura <- ess |> count(cntry, anio) |> pivot_wider(names_from = anio, values_from = n)
 print(as.data.frame(cobertura), row.names = FALSE)
 write_csv(cobertura, file.path(TAB, "02_cobertura_pais_ronda.csv"))
@@ -102,7 +85,7 @@ descriptivos <- ess_num |>
     p75       = quantile(valor, .75),
     minimo    = min(valor),
     maximo    = max(valor),
-    asimetria = psych::skew(valor),      # sesgo de la distribucion
+    asimetria = psych::skew(valor),      
     curtosis  = psych::kurtosi(valor),
     .groups   = "drop"
   ) |>
@@ -129,7 +112,7 @@ cat("\n--- Indice de actitud por pais ---\n")
 print(as.data.frame(desc_pais), row.names = FALSE)
 write_csv(desc_pais, file.path(TAB, "02_descriptivos_por_pais.csv"))
 # La comparacion media_ponderada vs media_simple documenta cuanto altera el peso
-# el resultado: si difieren, ponderar no es opcional.
+# el resultado.
 
 
 ###############################################################################
@@ -215,8 +198,8 @@ p3a <- ess_num |>
 ggsave(file.path(FIG, "f3a_distrib_0_10.png"), p3a, width = 9.4, height = 3.2, dpi = 200)
 
 # FIG 3b - Items de permisividad (escala 1-4)
-# Se representan como categorias, NO como media: son ordinales de 4 puntos y
-# fuertemente concentrados, de modo que un promedio ocultaria la forma real.
+# Se representan como categorias al ser ordinales de 4 puntos y fuertemente concentrados.
+# Promedio oculta la forma real.
 p3b <- ess_num |>
   select(all_of(items_4)) |>
   pivot_longer(everything(), names_to = "v", values_to = "valor") |>
@@ -239,7 +222,7 @@ ggsave(file.path(FIG, "f3b_distrib_1_4.png"), p3b, width = 9.4, height = 3.2, dp
 
 
 ###############################################################################
-# 5. OUTLIERS  (sobre el fichero CRUDO, para evidenciar el problema)
+# 5. OUTLIERS  (sobre el fichero antes de depurar)
 ###############################################################################
 
 cat("\n===== 5. OUTLIERS =====\n")
@@ -306,8 +289,7 @@ print(as.data.frame(cor_focal), row.names = FALSE)
 write_csv(cor_focal, file.path(TAB, "02_correlaciones_focal.csv"))
 
 # --- Deteccion de multicolinealidad ------------------------------------------
-# Igual que en la seleccion de predictores de un modelo, se identifican los
-# bloques de variables redundantes para retener un unico indicador por bloque.
+# Se identifican los bloques de variables redundantes para retener un unico indicador por bloque.
 pares <- which(abs(mat_cor) > .60 & upper.tri(mat_cor), arr.ind = TRUE)
 multicol <- tibble(
   var_1 = rownames(mat_cor)[pares[, "row"]],
@@ -318,7 +300,7 @@ cat("\n--- Pares con |rho| > 0,60: redundancia a resolver ---\n")
 print(as.data.frame(multicol), row.names = FALSE)
 write_csv(multicol, file.path(TAB, "02_multicolinealidad.csv"))
 
-# FIG 5 - Matriz de correlaciones (triangular inferior)
+# FIG 5 - Matriz de correlaciones
 p5 <- as.data.frame(as.table(mat_cor)) |>
   setNames(c("v1", "v2", "rho")) |>
   mutate(v1 = factor(v1, levels = vars_cor), v2 = factor(v2, levels = vars_cor)) |>
@@ -345,13 +327,12 @@ ggsave(file.path(FIG, "f5_corr.png"), p5, width = 8.6, height = 7.6, dpi = 200)
 # Cada figura responde a una de las cinco preguntas formuladas en el Reto 1.
 # Se generan aqui en version estatica (PNG) y se reimplementan en el dashboard
 # con plotly para anadirles interaccion. Las tablas agregadas que las sustentan
-# se exportan porque son tambien la fuente del informe y de la presentacion.
+# se exportan.
 
 
 # --- G1 (Pregunta 1): evolucion por pais, con destacado selectivo ------------
-# Catorce series de color simultaneas exceden el limite de discriminacion
-# cromatica fiable: once paises van en gris neutro como contexto y solo tres
-# se destacan con color, aprovechando la emergencia preatentiva del tono.
+# Catorce series de color simultaneas sobrepasan el limite de discriminacion cromatica fiable
+# Once paises van en gris neutro como contexto y tres se destacan con color.
 serie <- ess |>
   media_ponderada(idx_actitud, anio, cntry) |>
   con_nombre_pais()
@@ -369,8 +350,8 @@ p_g1 <- ggplot() +
            hjust = 0, size = 2.6, colour = SUAVE) +
   scale_colour_manual(values = PAIS_COLOR[DESTACADOS],
                       labels = PAIS_NOMBRE[DESTACADOS]) +
-  # El anio va como escala CUANTITATIVA: el intervalo entre rondas no es regular
-  # (la ronda 10 se retraso por la pandemia y la 11 es de 2023).
+  # El anio va como escala cuantitativa: el intervalo entre rondas no es regular
+  # (la ronda 10 se retraso por la pandemia y la 11 es de 2023/2024).
   scale_x_continuous(breaks = ANIOS) +
   labs(title = "La mayoria de Europa se abre; Hungria se cierra",
        subtitle = "Media ponderada del indice de actitud (0-10) - 14 paises presentes en las 11 rondas - los 11 restantes en gris",
@@ -380,12 +361,12 @@ ggsave(file.path(FIG, "f6_serie.png"), p_g1, width = 8.8, height = 5.2, dpi = 20
 
 
 # --- G2 (Pregunta 2): bandas de dispersion entre paises ----------------------
-# Muestra la VARIABILIDAD en lugar del nivel. La banda exterior marca el rango
-# entre el pais mas abierto y el mas restrictivo; la interior el recorrido
-# intercuartilico; la linea central la media de las medias nacionales.
+# Muestra la variabilidad en lugar del nivel. La banda exterior marca el rango
+# entre el pais mas abierto y el mas restrictivo, la interior el recorrido
+# intercuartilico, la linea central la media de las medias nacionales.
 # El area ocupa una posicion baja en la jerarquia de Cleveland y McGill para
-# estimar magnitudes exactas, pero la tarea aqui es juzgar la ANCHURA, no el
-# valor: por eso se anaden ademas las cifras en los extremos de la serie.
+# estimar magnitudes exactas. Se busca juzgar la anchura, no el valor.
+# Se anaden las cifras en los extremos de la serie.
 dispersion <- serie |>
   group_by(anio) |>
   summarise(minimo = min(media), p25 = quantile(media, .25),
@@ -417,12 +398,9 @@ ggsave(file.path(FIG, "g2_dispersion.png"), p_g2, width = 7.4, height = 5.2, dpi
 
 
 # --- G3 (Pregunta 3): gradiente educativo pais a pais ------------------------
-# Se analiza por pais y no por macro-region: cualquier agrupacion regional seria
-# una decision a priori del analista. El resultado por pais es ademas mas solido.
-# Se elige el grafico de puntos conectados y no barras agrupadas porque el
-# objeto de interes es la DISTANCIA entre niveles dentro de cada pais, y un
-# segmento codifica esa distancia mediante longitud, segundo canal en la
-# jerarquia de precision perceptiva.
+# Se analiza por pais.
+# Se elige el grafico de puntos conectados porque el objeto de interes es la distancia
+# entre niveles dentro de cada pais.
 gradiente <- ess |>
   filter(!is.na(nivel_edu)) |>
   media_ponderada(idx_actitud, cntry, nivel_edu) |>
@@ -457,12 +435,11 @@ ggsave(file.path(FIG, "f7_gradiente.png"), p_g3, width = 8.6, height = 5.6, dpi 
 
 
 # --- G4 (Pregunta 4): valoracion frente a permisividad -----------------------
-# A nivel individual, con casi trescientas mil observaciones y coeficientes en
+# A nivel individual, casi trescientas mil observaciones y coeficientes en
 # torno a 0,30, el solapamiento de marcas produciria una nube sin estructura.
-# Al AGREGAR por pais la unidad de analisis pasa a ser el pais y las marcas se
-# reducen a catorce, numero que permite etiquetado directo. La recta de ajuste
-# se incorpora como referencia para que la distancia a ella (las anomalias) se
-# perciba de inmediato.
+# Al agregar por pais la unidad de analisis pasa a ser el pais y las marcas se
+# reducen a catorce. La recta de ajuste se incorpora como referencia
+# para que la distancia a ella (las anomalias) se perciban facilmente.
 dos_indices <- ess |>
   media_ponderada(idx_actitud, cntry) |>
   rename(actitud = media, n_actitud = n) |>
@@ -498,14 +475,11 @@ ggsave(file.path(FIG, "g4_dos_indices.png"), p_g4, width = 7.6, height = 5.6, dp
 
 
 # --- G5 (Pregunta 5): pequenos multiplos, actitud y confianza institucional ---
-# Se emplea idx_conf_inst3 (parlamento, politicos y sistema legal) y no la
-# version de cuatro items, porque esta ultima incluye trstprt, que no se
-# pregunto en la ronda 1 y dejaria el primer punto vacio en los catorce paneles.
-# Manteniendo IDENTICOS los ejes de todos los paneles, la comparacion entre
+# Se emplea idx_conf_inst3 (parlamento, politicos y sistema legal)
+# Manteniendo iguales los ejes de todos los paneles, la comparacion entre
 # paises se convierte en una comparacion de posicion sobre una escala comun,
-# la tarea mas precisa de la jerarquia de Cleveland y McGill. Ambas series
-# comparten la escala 0-10, de modo que se representan en un unico eje vertical
-# y se evita el grafico de doble eje.
+# que es muy precisa segun la jerarquia de Cleveland y McGill. Ambas series
+# comparten la escala 0-10, asi que se representan en un unico eje vertical.
 cohesion <- ess |>
   media_ponderada(idx_actitud, anio, cntry) |>
   rename(actitud = media) |> select(-n) |>
@@ -554,9 +528,8 @@ ggsave(file.path(FIG, "g5_multiples.png"), p_g5, width = 9.6, height = 6.2, dpi 
 
 # --- Perfil sociodemografico por pais (base de la vista de exploracion) ------
 # Media ponderada del indice de actitud para cada nivel de cada segmentador,
-# dentro de cada pais y agrupando las once rondas. Es la tabla que permite
-# comprobar en el dashboard si el patron educativo se sostiene al cambiar de
-# segmento, que es justamente lo que el Reto 1 asigna a la vista de exploracion.
+# dentro de cada pais y agrupando las once rondas.
+# Permite comprobar en el dashboard si el patron educativo se sostiene al cambiar de segmento.
 perfil_dim <- function(datos, var, dimension) {
   datos |>
     filter(!is.na({{ var }}), !is.na(idx_actitud)) |>
@@ -583,12 +556,9 @@ cat("Combinaciones pais x segmento exportadas:", nrow(perfil), "\n")
 ###############################################################################
 # 9. CIFRAS DESTACADAS DEL DASHBOARD
 ###############################################################################
-# Las tres cifras de la banda superior de la vista panoramica. Se limitan a tres
-# de forma deliberada: la proliferacion de indicadores aislados desplaza la
-# atencion desde las relaciones hacia los valores sueltos.
+# Las tres cifras de la banda superior de la vista panoramica.
 # La columna 'clave' es un identificador estable en ASCII. El dashboard, el
-# informe y la presentacion buscan por ella y no por el rotulo: asi un cambio de
-# redaccion en la etiqueta no rompe silenciosamente ninguna de las tres salidas.
+# informe y la presentacion buscan por ella.
 cifras <- tibble(
   clave = c("media_2023", "cambio_2002_2023", "amplitud_2023"),
   cifra = c("Media europea 2023",

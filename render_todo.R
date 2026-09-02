@@ -4,8 +4,8 @@
 #
 # Autora: Pamela Valembois Madrigal
 #
-# ABRE ANTES el proyecto desde 'm8_reto2.Rproj' (RStudio: File > Open Project)
-# y despues ejecuta este fichero completo (Ctrl/Cmd + Shift + S, o 'Source').
+# Hay que abrir antes el proyecto desde 'm8_reto2.Rproj' (RStudio: File > Open Project)
+# y despues ejecutar este fichero completo (Ctrl/Cmd + Shift + S, o 'Source').
 #
 # Cadena de ejecucion:
 #   01_importar_depurar.R  ->  1_datos/3_depurada/ess_clean.rds
@@ -14,11 +14,11 @@
 #   informe.Rmd            ->  3_informe/informe.pdf
 #   presentacion.Rmd       ->  4_presentacion/presentacion.html
 #
-# Las tres salidas finales leen las MISMAS tablas agregadas que produce el
+# Las tres salidas finales leen las mismas tablas agregadas que produce el
 # script 02 y ninguna recalcula las medias por su cuenta, de modo que no pueden
 # discrepar entre si.
 #
-# Tiempo aproximado: 3-6 minutos, la mayor parte en la lectura del .sav de 44 MB.
+# Tiempo aproximado: 3-6 minutos.
 # =============================================================================
 
 library(here)
@@ -28,8 +28,7 @@ cat("\nRaiz del proyecto:", here(), "\n\n")
 # -----------------------------------------------------------------------------
 # 0. COMPROBACION DE DEPENDENCIAS
 # -----------------------------------------------------------------------------
-# Se comprueban todos los paquetes ANTES de empezar, para no descubrir que falta
-# uno despues de cinco minutos de calculo.
+# Se comprueban todos los paquetes antes de empezar.
 paquetes <- c("here", "haven", "labelled", "dplyr", "tidyr", "readr", "forcats",
               "ggplot2", "psych", "knitr", "rmarkdown",
               "flexdashboard", "plotly", "crosstalk")
@@ -50,8 +49,7 @@ if (length(faltan_opc) > 0) {
           paste0('"', faltan_opc, '"', collapse = ", "), "))")
 }
 
-# El informe se compila en PDF, lo que exige una distribucion de LaTeX. Si no la
-# hay, se avisa aqui y no al final.
+# El informe se compila en PDF, lo que exige una distribucion de LaTeX.
 if (!nzchar(Sys.which("xelatex")) && !nzchar(Sys.which("pdflatex"))) {
   message("Aviso: no se encuentra LaTeX, asi que el informe en PDF fallara.\n",
           "Instalalo con:  install.packages('tinytex'); tinytex::install_tinytex()")
@@ -86,11 +84,25 @@ cat("OK ->", here("2_dashboard", "dashboard.html"), "\n")
 # 4. INFORME TECNICO
 # -----------------------------------------------------------------------------
 paso(4, "Informe tecnico con knitr (PDF)")
-rmarkdown::render(here("3_informe", "codigo", "informe.Rmd"),
-                  output_file = "informe.pdf",
-                  output_dir  = here("3_informe"),
-                  quiet = TRUE)
-cat("OK ->", here("3_informe", "informe.pdf"), "\n")
+
+informe_ok <- tryCatch({
+  rmarkdown::render(here("3_informe", "codigo", "informe.Rmd"),
+                    output_file = "informe.pdf",
+                    output_dir  = here("3_informe"),
+                    quiet = TRUE)
+  cat("OK ->", here("3_informe", "informe.pdf"), "\n")
+  TRUE
+}, error = function(e) {
+  message("\nEl informe en PDF no se pudo compilar:\n  ", conditionMessage(e),
+          "\n\nCasi siempre es LaTeX. Para reinstalar TinyTeX desde cero:",
+          "\n  tinytex::uninstall_tinytex(force = TRUE)",
+          "\n  unlink('~/Library/TinyTeX', recursive = TRUE)   # macOS",
+          "\n  tinytex::install_tinytex()",
+          "\n\nAlternativa sin LaTeX: cambiar en informe.Rmd la salida a",
+          "\n  output: html_document\n",
+          "\nSe continua con la presentacion.")
+  FALSE
+})
 
 # -----------------------------------------------------------------------------
 # 5. PRESENTACION
@@ -102,4 +114,8 @@ rmarkdown::render(here("4_presentacion", "codigo", "presentacion.Rmd"),
                   quiet = TRUE)
 cat("OK ->", here("4_presentacion", "presentacion.html"), "\n")
 
-paso("", "PROYECTO REPRODUCIDO POR COMPLETO")
+if (informe_ok) {
+  paso("", "PROYECTO REPRODUCIDO POR COMPLETO")
+} else {
+  paso("", "CADENA COMPLETADA SALVO EL INFORME EN PDF (ver el aviso de arriba)")
+}
